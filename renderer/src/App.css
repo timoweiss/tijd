@@ -1,0 +1,67 @@
+body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
+input.main-input {
+  width: 100%;
+  border: 0;
+  padding: 10px;
+  background: rgb(249, 249, 249);
+}
+
+input.main-input:focus {
+  border: 0;
+  outline: none;
+}
+
+.past-item {
+  padding: 10px;
+  border-top: 1px solid #dedede;
+  font-size: 12px;
+  display: flex;
+  color: #4a4a4a;
+  font-weight: lighter;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.past-item:hover {
+  background: #fbfbfb;
+}
+
+.delimiter-item {
+  padding: 10px;
+  border-top: 1px solid #dedede;
+  font-size: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  background: rgb(243, 243, 243);
+  color: #717171;
+  font-weight: lighter;
+  text-transform: uppercase;
+
+}

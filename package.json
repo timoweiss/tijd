@@ -1,0 +1,34 @@
+{
+  "name": "tijd",
+  "version": "1.0.0",
+  "description": "Simple time tracking",
+  "main": "main/index.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "build": {
+  "appId": "com.timo-weiss.tijd",
+  "mac": {
+    "category": "your.app.category.type",
+    "extendInfo": {
+    "LSUIElement": 1
+  }
+  }
+},
+  "devDependencies": {
+    "electron": "^1.7.5",
+    "electron-builder": "^19.20.1"
+  }
+}
