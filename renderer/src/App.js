@@ -222,7 +222,7 @@ class App extends Component {
 
     this.setState(prevState => ({
       ...prevState,
-      hints: !value ? [] : slashHints.filter(hint => hint.hint.startsWith(value)),
+      hints: value ? slashHints.filter(hint => hint.hint.startsWith(value)) : [],
       timeInput: value
     }))
     setTimeout(() => this.messagesEnd.scrollIntoView({ behavior: 'smooth' }), 1000)
