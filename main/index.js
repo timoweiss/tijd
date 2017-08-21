@@ -2,14 +2,38 @@ const electron = require('electron')
 // Module to control application life.
 
 // Module to create native browser window.
-const { app, BrowserWindow, Tray, Menu, globalShortcut } = electron;
+const { app, BrowserWindow, Tray, Menu, globalShortcut, ipcMain } = electron;
 
 const path = require('path')
 const url = require('url')
+const fs = require('fs');
+
+
+const isDev = process.env.NODE_ENV === 'dev';
+
+const shortcuts = require('./shortcuts');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow;
+
+ipcMain.on('new-entry', (event, arg) => {
+  fs.appendFile('logs.jsonl', JSON.stringify(arg) + '\n', (err) => {
+    if (err) throw err;
+    console.log('Saved!');
+  });
+});
+
+ipcMain.on('get-entries', (event, arg) => {
+  console.log('getting entries')
+  fs.readFile('logs.jsonl', 'utf-8', (err, data) => {
+    if (err) throw err;
+    const jsonArray = data.split('\n');
+    console.log({ jsonArray })
+    const a = jsonArray.filter(jsonString => !!jsonString).map(jsonString => JSON.parse(jsonString));
+    event.sender.send('get-entries-resp', a);
+  });
+})
 
 function createWindow() {
   // Create the browser window.
@@ -33,7 +57,7 @@ function createWindow() {
     console.log({ trayBounds })
 
     mainWindow = new BrowserWindow({
-      width: 330,
+      width: isDev ? 1330 : 330,
       height: 400,
       title: 'Now',
       resizable: false,
@@ -79,28 +103,19 @@ function createWindow() {
 
 
   tray.on('click', openWindow)
-  const ret = globalShortcut.register('CmdOrCtrl+Shift+U', () => {
+  const showWindow = () => {
     console.log('CmdOrCtrl+Shift+U is pressed', { mainWindow })
     if (!mainWindow || !mainWindow.isFocused()) {
       openWindow();
     } else {
       mainWindow.hide()
     }
-
-  })
-
-  if (!ret) {
-    console.log('registration failed')
+  }
+  if (!shortcuts.onOpen(showWindow)) {
+    console.error('registering shortcut failed')
   }
 
-  tray.on('drop-text', () => {
-    console.log('drop-text')
-    mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, 'index.html'),
-      protocol: 'file:',
-      slashes: true
-    }))
-  })
+
 }
 
 // This method will be called when Electron has finished

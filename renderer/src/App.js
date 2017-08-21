@@ -6,8 +6,22 @@ import { Tooltip } from 'element-react';
 import 'element-theme-default';
 import moment from 'moment';
 import TimeAgo from 'time-ago';
-const {ago, today } = TimeAgo();
 
+import { ipcRenderer } from 'electron';
+
+const { ago, today } = TimeAgo();
+
+
+function putOngoing(obj) {
+  localStorage.setItem('ongoing-item', JSON.stringify(obj));
+}
+function getOngoing() {
+  const ongoing = localStorage.getItem('ongoing-item');
+  if (ongoing) {
+    return JSON.parse(ongoing);
+  }
+  return null;
+}
 
 const groupBySameday = items => items.reduce(
   (groups, item) => {
@@ -44,7 +58,7 @@ const PastItems = ({ items, bottomitem }) => {
     const creationDate = moment().dayOfYear(day);
     elems.push(
       <DelimiterItem key={'delimiter_' + day} dateString={creationDate.format('dddd, MMMM Do YYYY')} />,
-      ...itemsGroupedByDay[day].map(item => console.log({item}) || <PastItem key={item.k} item={item} />)
+      ...itemsGroupedByDay[day].map(item => console.log({ item }) || <PastItem key={item.k} item={item} />)
     );
   });
 
@@ -88,12 +102,7 @@ const slashHints = [{
 class App extends Component {
   state = {
     timeInput: '',
-    pastItems: [
-      { k: 0, name: 'something earlier', created: 1502386035976, finished: 1502375235976 },
-      { k: 1, name: 'something earlier2', created: 1502386035976, finished: 1502383755976 },
-      { k: 2, name: 'something yesterday', created: 1502558835976, finished: 1502556795976 },
-      { k: 3, name: 'something today', created: 1502624489144, finished: 1502621489144 },
-    ],
+    pastItems: [],
     hints: [],
     interval: null,
     h: 0,
@@ -128,6 +137,22 @@ class App extends Component {
   }
 
   componentDidMount(a, b, c) {
+    console.log('sending', 'get-entries')
+
+    ipcRenderer.send('get-entries');
+
+    // load latest ongoing
+    const ongoing = getOngoing();
+
+    ipcRenderer.on('get-entries-resp', (event, data) => {
+      console.log({ data })
+      if (ongoing) {
+        data.push(ongoing);
+      }
+      this.setState({
+        pastItems: data
+      })
+    })
     this.setState((prevState) => ({
       interval: setInterval(() => this.setState({ h: prevState.h + 1 }), 2000)
     }));
@@ -155,24 +180,33 @@ class App extends Component {
       return;
     }
 
-   
+
 
     this.setState(prevState => {
 
-      const last = prevState.pastItems.pop();
+      const last = getOngoing();
       const now = new Date().toISOString();
-      last.finished = now
+      if (last) {
+        last.finished = now;
+        ipcRenderer.send('new-entry', last);
+      }
+
       let newItem = {};
 
-      if(slashHints.some(hint => text.startsWith(hint.hint))) {
-        newItem = slashHints.find(hint => text.startsWith(hint.hint)).create(text);
+      if (slashHints.some(hint => text.startsWith(hint.hint))) {
+        newItem = slashHints.find(hint => text.startsWith(hint.hint)).create(text);
       } else {
         newItem = {
-          k: prevState.pastItems.length + 2,
+          k: prevState.pastItems.length + 2 + Date.now(),
           name: text,
           created: now,
         }
       }
+      // add new ongoing
+      putOngoing(newItem);
+
+      prevState.pastItems.pop();
+
 
       return {
         ...prevState,
