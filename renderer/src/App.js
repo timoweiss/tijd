@@ -9,6 +9,9 @@ import TimeAgo from 'time-ago';
 
 import { ipcRenderer } from 'electron';
 
+import { getDetailedTimeFromTo, getDetailedTimeToNow } from './helper/zeit';
+
+
 const { ago, today } = TimeAgo();
 
 
@@ -36,12 +39,25 @@ const ta = {
   duration: (date, end) => moment(date).from(end || new Date(), true),
   ago: (date) => moment(date).fromNow(),
 };
+const PluralSingular = ({ num, singular }) => num ? <span>{num} {num > 1 ? singular + 's' : singular} </span> : null;
+const DetailedTime = ({ from, to }) => {
+  const dt = to ? getDetailedTimeFromTo(from, to) : getDetailedTimeToNow(from);
+  return (
+    <div>
+      <PluralSingular num={dt.days} singular="day" />
+      <PluralSingular num={dt.hours} singular="hour" />
+      <PluralSingular num={dt.days} singular="day" />
+      <PluralSingular num={dt.minutes} singular="minute" />
+      <PluralSingular num={dt.seconds} singular="second" />
+    </div>
+  )
+};
 
 const Time = ({ item }) => {
 
   const a = (b, c, d) => console.log('enter', { b, c, d });
   return (
-    <Tooltip style={{ fontSize: '10px' }} placement="top" content={<span>{ago(item.created)}</span>}>
+    <Tooltip style={{ fontSize: '10px' }} placement="top" content={<span><DetailedTime from={item.created} to={item.finished} /> </span>}>
       {item.finished ? ta.duration(item.created, item.finished) : 'started ' + ta.ago(item.created)}
     </Tooltip>
   );
