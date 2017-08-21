@@ -170,7 +170,7 @@ class App extends Component {
       })
     })
     this.setState((prevState) => ({
-      interval: setInterval(() => this.setState({ h: prevState.h + 1 }), 2000)
+      interval: setInterval(() => this.setState({ h: prevState.h + 1 }), 1000)
     }));
     console.log('comp did mount', { a, b, c })
   }
