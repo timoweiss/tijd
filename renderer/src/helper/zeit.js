@@ -25,3 +25,7 @@ export function getDetailedTimeFromTo(from, to) {
   }
 
 }
+
+export function getDetailedTimeToNow(from) {
+  return getDetailedTimeFromTo(from, Date.now());
+}
