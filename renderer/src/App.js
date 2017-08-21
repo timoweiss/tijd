@@ -184,19 +184,25 @@ class App extends Component {
 
     this.setState(prevState => {
 
-      const last = getOngoing();
       const now = new Date().toISOString();
+      // ongoing item
+      const last = prevState.pastItems.pop();
+
       if (last) {
+        // finish it
         last.finished = now;
         ipcRenderer.send('new-entry', last);
       }
 
+      // thats the new ongoing item
       let newItem = {};
 
+      // check for special commands
       if (slashHints.some(hint => text.startsWith(hint.hint))) {
         newItem = slashHints.find(hint => text.startsWith(hint.hint)).create(text);
       } else {
         newItem = {
+          // TODO: ID creation, rename variable
           k: prevState.pastItems.length + 2 + Date.now(),
           name: text,
           created: now,
@@ -205,13 +211,13 @@ class App extends Component {
       // add new ongoing
       putOngoing(newItem);
 
-      prevState.pastItems.pop();
-
-
       return {
         ...prevState,
+        // put back the now completed ongoing and the new ongoing 
         pastItems: [...prevState.pastItems, last, newItem],
+        // reset hint list
         hints: [],
+        // reset text input
         timeInput: ''
       };
     });
