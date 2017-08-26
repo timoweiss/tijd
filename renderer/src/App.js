@@ -181,7 +181,7 @@ class App extends Component {
   componentDidMount(a, b, c) {
     console.log('sending', 'get-entries')
 
-    // load latest ongoing
+    // load possible latest ongoing
     const ongoing = getOngoing();
 
     ipcRenderer.on('get-entries-resp', (event, data) => {
