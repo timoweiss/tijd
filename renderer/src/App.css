@@ -26,10 +26,12 @@ body {
 
 
 input.main-input {
-  width: 100%;
+  width: calc(100% - 20px);
   border: 0;
   padding: 10px;
   background: rgb(249, 249, 249);
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 input.main-input:focus {
