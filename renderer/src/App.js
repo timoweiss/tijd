@@ -6,7 +6,6 @@ import ReactTooltip from 'react-tooltip'
 // import TA from 'time-ago'; 
 import 'element-theme-default';
 import moment from 'moment';
-import TimeAgo from 'time-ago';
 
 
 import { ipcRenderer } from 'electron';
@@ -17,7 +16,6 @@ import Caret from './components/caret';
 const lightGrey = 'rgb(243, 243, 243)';
 
 
-const { ago, today } = TimeAgo();
 
 
 function putOngoing(obj) {
