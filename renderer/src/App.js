@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import './App.css';
 import { Tooltip } from 'element-react';
+import ReactTooltip from 'react-tooltip'
 // import TA from 'time-ago'; 
 import 'element-theme-default';
 import moment from 'moment';
@@ -10,6 +11,7 @@ import TimeAgo from 'time-ago';
 import { ipcRenderer } from 'electron';
 
 import { getDetailedTimeFromTo, getDetailedTimeToNow } from './helper/zeit';
+import Caret from './components/caret';
 
 
 const { ago, today } = TimeAgo();
@@ -53,9 +55,9 @@ const DetailedTime = ({ from, to }) => {
   )
 };
 
-const Time = ({ item }) => {
+const TimeContent = ({ item }) => <div data-tip data-for={item.k + 'tt'}><span>{item.finished ? ta.duration(item.created, item.finished) : 'started ' + ta.ago(item.created)}</span></div>;
 
-  const a = (b, c, d) => console.log('enter', { b, c, d });
+const Time = ({ item }) => {
   return (
     <Tooltip style={{ fontSize: '10px' }} placement="top" content={<span><DetailedTime from={item.created} to={item.finished} /> </span>}>
       {item.finished ? ta.duration(item.created, item.finished) : 'started ' + ta.ago(item.created)}
