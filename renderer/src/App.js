@@ -8,10 +8,13 @@ import 'element-theme-default';
 import moment from 'moment';
 import TimeAgo from 'time-ago';
 
+
 import { ipcRenderer } from 'electron';
 
 import { getDetailedTimeFromTo, getDetailedTimeToNow } from './helper/zeit';
 import Caret from './components/caret';
+
+const lightGrey = 'rgb(243, 243, 243)';
 
 
 const { ago, today } = TimeAgo();
@@ -59,9 +62,10 @@ const TimeContent = ({ item }) => <div data-tip data-for={item.k + 'tt'}><span>{
 
 const Time = ({ item }) => {
   return (
-    <Tooltip style={{ fontSize: '10px' }} placement="top" content={<span><DetailedTime from={item.created} to={item.finished} /> </span>}>
-      {item.finished ? ta.duration(item.created, item.finished) : 'started ' + ta.ago(item.created)}
-    </Tooltip>
+    <div style={{ fontSize: '10px' }}>
+      <ReactTooltip place="left" effect="solid" id={item.k + 'tt'}><DetailedTime from={item.created} to={item.finished} /></ReactTooltip>
+      <TimeContent item={item} />
+    </div>
   );
 };
 const DelimiterItem = ({ dateString }) => <div className="delimiter-item"><span>{dateString}</span></div>;
@@ -86,7 +90,8 @@ const PastItems = ({ items, bottomitem }) => {
       position: 'absolute',
       bottom: '34px',
       width: '100%',
-      maxHeight: 'calc(100vh - 34px)'
+      background: 'white',
+      maxHeight: 'calc(100vh - 80px)'
     }}
     >{elems}
       {bottomitem}
@@ -128,7 +133,26 @@ class App extends Component {
   render() {
 
     return (
-      <div className="App" style={{ background: 'white', height: '100vh' }}>
+      <div className="App" style={{ background: 'transparent', height: '100vh' }}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Caret />
+
+        </div>
+        <span style={{
+          color: '#717171',
+          background: lightGrey,
+          fontWeight: 'bold',
+          fontSize: '11px',
+          padding: '10px 0',
+          width: '100%',
+          textAlign: 'center',
+          float: 'left',
+          borderBottom: '1px solid rgb(173, 173, 173)',
+          borderTopLeftRadius: '5px',
+          borderTopRightRadius: '5px'
+
+        }}>TIJD</span>
+
         <PastItems bottomitem={<div key='asdöja' style={{ float: "left", clear: "both" }}
           ref={(el) => { this.messagesEnd = el; }} />} items={this.state.pastItems} />
 
