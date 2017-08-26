@@ -69,7 +69,7 @@ function createWindow() {
       transparent: true,
       frame: false,
       movable: isDev,
-      y: 10,
+      y: 25,
       x: trayBounds.x - 160,
       webPreferences: {
         backgroundThrottling: false,
