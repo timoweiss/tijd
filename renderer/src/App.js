@@ -122,6 +122,8 @@ const slashHints = [{
   create: name => ({ k: Date.now() + 'bye', name, created: Date.now(), type: 'break' }),
 }];
 
+const BottomItem = ({ refElem }) => <div key='bottom_item' style={{ float: "left", clear: "both" }} ref={(el) => { refElem = el; }} />
+
 class App extends Component {
   state = {
     timeInput: '',
@@ -153,8 +155,7 @@ class App extends Component {
 
         }}>TIJD</span>
 
-        <PastItems bottomitem={<div key='asdöja' style={{ float: "left", clear: "both" }}
-          ref={(el) => { this.messagesEnd = el; }} />} items={this.state.pastItems} />
+        <PastItems bottomitem={<BottomItem refElem={this.messagesEnd} />} items={this.state.pastItems} />
 
         <form onSubmit={this.addTime} style={{ position: 'absolute', left: 0, bottom: 0, width: '100%' }}>
           <hr style={hrStyle} />
