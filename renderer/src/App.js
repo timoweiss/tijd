@@ -179,6 +179,15 @@ class App extends Component {
   }
 
   componentDidMount(a, b, c) {
+    document.addEventListener('keydown', (event) => {
+      // ESC
+      if (event.keyCode === 27) {
+        event.stopPropagation();
+        event.preventDefault();
+        ipcRenderer.send('hide-app')
+      }
+    })
+
     console.log('sending', 'get-entries')
 
     // load possible latest ongoing
