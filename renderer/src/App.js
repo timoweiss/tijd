@@ -86,10 +86,10 @@ const PastItems = ({ items, bottomitem }) => {
     <div style={{
       overflow: 'scroll',
       position: 'absolute',
-      bottom: '34px',
+      bottom: '33px',
       width: '100%',
       background: 'white',
-      maxHeight: 'calc(100vh - 80px)'
+      maxHeight: 'calc(100vh - 78px)'
     }}
     >{elems}
       {bottomitem}
@@ -102,7 +102,7 @@ const hrStyle = {
   height: '1px',
   border: 0,
   borderTop: '1px solid rgb(173, 173, 173)',
-  margin: '0',
+  margin: '0 0 -1px',
   padding: 0,
 }
 
@@ -133,7 +133,7 @@ class App extends Component {
   render() {
 
     return (
-      <div className="App" style={{ background: 'transparent', height: '100vh' }}>
+      <div className="App" style={{ background: 'transparent', height: '100vh', margin: '0 5px', position: 'relative' }}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Caret />
 
@@ -144,13 +144,14 @@ class App extends Component {
           fontWeight: 'bold',
           fontSize: '11px',
           padding: '10px 0',
+          margin: '-1px 0 0',
           width: '100%',
           textAlign: 'center',
           float: 'left',
           borderBottom: '1px solid rgb(173, 173, 173)',
           borderTopLeftRadius: '5px',
-          borderTopRightRadius: '5px'
-
+          borderTopRightRadius: '5px',
+          boxShadow: '0px 1px 3px 0 rgba(0,0,0,.2)'
         }}>TIJD</span>
 
         <PastItems bottomitem={<BottomItem refElem={this.messagesEnd} />} items={this.state.pastItems} />
