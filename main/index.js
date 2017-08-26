@@ -39,6 +39,10 @@ ipcMain.on('get-entries', (event, arg) => {
   });
 })
 
+ipcMain.on('hide-app', (event, arg) => {
+  mainWindow.hide()
+});
+
 function createWindow() {
   // Create the browser window.
 
