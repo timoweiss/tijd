@@ -58,9 +58,9 @@ function createWindow() {
 
     mainWindow = new BrowserWindow({
       width: isDev ? 1330 : 330,
-      height: 400,
+      height: isDev ? 800 : 400,
       title: 'Now',
-      resizable: false,
+      resizable: !isDev,
       show: true,
       fullscreenable: false,
 
@@ -68,12 +68,12 @@ function createWindow() {
       minimizable: false,
       transparent: true,
       frame: false,
-      movable: false,
+      movable: isDev,
       y: 10,
       x: trayBounds.x - 160,
       webPreferences: {
         backgroundThrottling: false,
-        devTools: true
+        devTools: isDev
       }
     })
 
