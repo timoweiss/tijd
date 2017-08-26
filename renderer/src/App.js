@@ -207,22 +207,15 @@ class App extends Component {
     }));
   }
 
-  componentDidUpdate(a, b, c) {
-    console.log('comp did up', { a, b, c })
-  }
-
   addTime = (event) => {
     event.preventDefault();
     event.stopPropagation();
-
 
     const text = this.state.timeInput;
 
     if (!text) {
       return;
     }
-
-
 
     this.setState(prevState => {
 
