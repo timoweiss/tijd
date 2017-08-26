@@ -8,6 +8,10 @@ const path = require('path')
 const url = require('url')
 const fs = require('fs');
 
+const logFile = path.join((electron.app || electron.remote.app).getPath('userData'), 'logs.jsonl');
+
+fs.openSync(logFile, 'a');
+
 
 const isDev = process.env.NODE_ENV === 'dev';
 
@@ -18,7 +22,7 @@ const shortcuts = require('./shortcuts');
 let mainWindow;
 
 ipcMain.on('new-entry', (event, arg) => {
-  fs.appendFile('logs.jsonl', JSON.stringify(arg) + '\n', (err) => {
+  fs.appendFile(logFile, JSON.stringify(arg) + '\n', (err) => {
     if (err) throw err;
     console.log('Saved!');
   });
@@ -26,7 +30,7 @@ ipcMain.on('new-entry', (event, arg) => {
 
 ipcMain.on('get-entries', (event, arg) => {
   console.log('getting entries')
-  fs.readFile('logs.jsonl', 'utf-8', (err, data) => {
+  fs.readFile(logFile, 'utf-8', (err, data) => {
     if (err) throw err;
     const jsonArray = data.split('\n');
     console.log({ jsonArray })
