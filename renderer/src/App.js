@@ -120,7 +120,7 @@ const slashHints = [{
   create: name => ({ k: Date.now() + 'bye', name, created: Date.now(), type: 'break' }),
 }];
 
-const BottomItem = ({ refElem }) => <div key='bottom_item' style={{ float: "left", clear: "both" }} ref={(el) => { refElem = el; }} />
+const BottomItem = ({ inputRef }) => <div key='bottom_item' style={{ float: "left", clear: "both" }} ref={inputRef} />
 
 class App extends Component {
   state = {
@@ -154,7 +154,7 @@ class App extends Component {
           boxShadow: '0px 1px 3px 0 rgba(0,0,0,.2)'
         }}>TIJD</span>
 
-        <PastItems bottomitem={<BottomItem refElem={this.messagesEnd} />} items={this.state.pastItems} />
+        <PastItems bottomitem={<BottomItem inputRef={input => this.messagesEnd = input} />} items={this.state.pastItems} />
 
         <form onSubmit={this.addTime} style={{ position: 'absolute', left: 0, bottom: 0, width: '100%' }}>
           <hr style={hrStyle} />
@@ -246,6 +246,8 @@ class App extends Component {
       // add new ongoing
       putOngoing(newItem);
 
+      setTimeout(() => this.messagesEnd.scrollIntoView({ behavior: 'smooth' }), 0)
+
       return {
         ...prevState,
         // put back the now completed ongoing and the new ongoing 
@@ -266,7 +268,7 @@ class App extends Component {
       hints: value ? slashHints.filter(hint => hint.hint.startsWith(value)) : [],
       timeInput: value
     }))
-    setTimeout(() => this.messagesEnd.scrollIntoView({ behavior: 'smooth' }), 1000)
+    // setTimeout(() => this.messagesEnd.scrollIntoView({ behavior: 'smooth' }), 1000)
   }
 }
 
