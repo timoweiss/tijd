@@ -181,8 +181,6 @@ class App extends Component {
   componentDidMount(a, b, c) {
     console.log('sending', 'get-entries')
 
-    ipcRenderer.send('get-entries');
-
     // load latest ongoing
     const ongoing = getOngoing();
 
@@ -195,6 +193,8 @@ class App extends Component {
         pastItems: data
       })
     })
+    ipcRenderer.send('get-entries');
+
     this.setState((prevState) => ({
       interval: setInterval(() => this.setState({ h: prevState.h + 1 }), 1000)
     }));
