@@ -63,7 +63,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
       width: isDev ? 1330 : 330,
       height: isDev ? 800 : 400,
-      title: 'Now',
+      title: 'Tijd',
       resizable: !isDev,
       show: true,
       fullscreenable: false,
