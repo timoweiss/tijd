@@ -104,13 +104,14 @@ function createWindow() {
 
   tray.on('click', openWindow)
   const showWindow = () => {
-    console.log('CmdOrCtrl+Shift+U is pressed', { mainWindow })
+    console.log('CmdOrCtrl+Shift+U is pressed')
     if (!mainWindow || !mainWindow.isFocused()) {
       openWindow();
     } else {
       mainWindow.hide()
     }
   }
+
   if (!shortcuts.onOpen(showWindow)) {
     console.error('registering shortcut failed')
   }
