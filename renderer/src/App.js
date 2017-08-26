@@ -133,7 +133,7 @@ class App extends Component {
   render() {
 
     return (
-      <div className="App" style={{ background: 'transparent', height: '100vh', margin: '0 5px', position: 'relative' }}>
+      <div className="App" style={{ background: 'white', height: '100vh', margin: '0 5px', position: 'relative' }}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Caret />
 
