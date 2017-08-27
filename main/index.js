@@ -78,7 +78,7 @@ function createWindow() {
       frame: false,
       movable: isDev,
       y: 25,
-      x: trayBounds.x - 160,
+      x: trayBounds.x - 154,
       webPreferences: {
         backgroundThrottling: false,
         devTools: isDev
