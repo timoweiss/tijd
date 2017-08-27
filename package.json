@@ -19,14 +19,14 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "build": {
-  "appId": "com.timo-weiss.tijd",
-  "mac": {
-    "category": "your.app.category.type",
-    "extendInfo": {
-    "LSUIElement": 1
-  }
-  }
-},
+    "appId": "com.timo-weiss.tijd",
+    "mac": {
+      "category": "your.app.category.type",
+      "extendInfo": {
+        "LSUIElement": 1
+      }
+    }
+  },
   "devDependencies": {
     "electron": "^1.7.5",
     "electron-builder": "^19.20.1"
