@@ -84,15 +84,21 @@ const PastItems = ({ items, bottomitem }) => {
 
   return (
     <div style={{
-      overflow: 'scroll',
-      position: 'absolute',
-      bottom: '33px',
-      width: '100%',
+      height: 'calc(100vh - 54px)',
+      marginTop: '10px',
       background: 'white',
-      maxHeight: 'calc(100vh - 78px)'
-    }}
-    >{elems}
-      {bottomitem}
+    }}>
+      <div style={{
+        overflow: 'scroll',
+        position: 'absolute',
+        bottom: '33px',
+        width: '100%',
+
+        maxHeight: 'calc(100vh - 78px)'
+      }}
+      >{elems}
+        {bottomitem}
+      </div>
     </div>
   );
 };
@@ -133,7 +139,7 @@ class App extends Component {
   render() {
 
     return (
-      <div className="App" style={{ background: 'white', height: '100vh', margin: '0 5px', position: 'relative' }}>
+      <div className="App" style={{ background: 'transparent', height: '100vh', margin: '0 5px', position: 'relative' }}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Caret />
 
