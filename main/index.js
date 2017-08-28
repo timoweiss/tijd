@@ -9,8 +9,9 @@ const url = require('url')
 const fs = require('fs');
 
 const logFile = path.join((electron.app || electron.remote.app).getPath('userData'), 'logs.jsonl');
-
-fs.openSync(logFile, 'a');
+try {
+  fs.openSync(logFile, 'a');
+} catch (e) { }
 
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = 'prod';
