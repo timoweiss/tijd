@@ -12,6 +12,9 @@ const logFile = path.join((electron.app || electron.remote.app).getPath('userDat
 
 fs.openSync(logFile, 'a');
 
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = 'prod';
+}
 
 const isProd = process.env.NODE_ENV === 'prod';
 
