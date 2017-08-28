@@ -13,7 +13,7 @@ const logFile = path.join((electron.app || electron.remote.app).getPath('userDat
 fs.openSync(logFile, 'a');
 
 
-const isDev = process.env.NODE_ENV === 'dev';
+const isProd = process.env.NODE_ENV === 'prod';
 
 const shortcuts = require('./shortcuts');
 
@@ -65,10 +65,10 @@ function createWindow() {
     console.log({ trayBounds })
 
     mainWindow = new BrowserWindow({
-      width: isDev ? 1330 : 330,
-      height: isDev ? 800 : 400,
+      width: isProd ? 330 : 1330,
+      height: isProd ? 400 : 800,
       title: 'Tijd',
-      resizable: !isDev,
+      resizable: !isProd,
       show: true,
       fullscreenable: false,
 
@@ -76,12 +76,12 @@ function createWindow() {
       minimizable: false,
       transparent: true,
       frame: false,
-      movable: isDev,
+      movable: !isProd,
       y: 25,
       x: trayBounds.x - 154,
       webPreferences: {
         backgroundThrottling: false,
-        devTools: isDev
+        devTools: !isProd
       }
     })
 
