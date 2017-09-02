@@ -1,7 +1,8 @@
-import React from 'react'
+/* eslint-disable */
+import React from 'react';
 
 const Caret = () =>
-  <svg
+  (<svg
     width="28"
     height="13"
     viewBox="0 0 28 13"
@@ -12,6 +13,6 @@ const Caret = () =>
       fill="rgb(243, 243, 243"
       fillRule="evenodd"
     />
-  </svg>
+  </svg>);
 
-export default Caret
+export default Caret;
