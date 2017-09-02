@@ -68,39 +68,60 @@ const Time = ({ item }) => {
 };
 const DelimiterItem = ({ dateString }) => <div className="delimiter-item"><span>{dateString}</span></div>;
 
-const PastItem = ({ item }) => <div className="past-item"><span>{item.name}</span><Time item={item} /></div>;
 
-const PastItems = ({ items, bottomitem }) => {
-  const itemsGroupedByDay = groupBySameday(items);
-  const days = Object.keys(itemsGroupedByDay);
-  const elems = [];
-  days.forEach(day => {
-    const creationDate = moment().dayOfYear(day);
-    elems.push(
-      <DelimiterItem key={'delimiter_' + day} dateString={creationDate.format('dddd, MMMM Do YYYY')} />,
-      ...itemsGroupedByDay[day].map(item => <PastItem key={item.k} item={item} />)
-    );
-  });
+const PastItem = ({ item, showEdit }) => (
+  <div className="past-item">
+    <span>{item.name}</span>
+    <Time item={item} />
+    {showEdit ? <div style={{ width: '100%' }}>
+      <hr />
+      edit view</div> : null}
+  </div>
+);
 
-  return (
-    <div style={{
-      height: 'calc(100vh - 54px)',
-      marginTop: '10px',
-      background: 'white',
-    }}>
+class PastItems extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedItemId: ''
+    };
+  }
+  render() {
+
+    const { items, bottomitem } = this.props;
+
+    const itemsGroupedByDay = groupBySameday(items);
+    const days = Object.keys(itemsGroupedByDay);
+    const elems = [];
+
+    days.forEach(day => {
+      const creationDate = moment().dayOfYear(day);
+      elems.push(
+        <DelimiterItem key={'delimiter_' + day} dateString={creationDate.format('dddd, MMMM Do YYYY')} />,
+        ...itemsGroupedByDay[day].map(item => <div key={item.k} onClick={() => this.setState({ selectedItemId: item.k })}><PastItem showEdit={this.state.selectedItemId === item.k} item={item} /></div>)
+      );
+    });
+
+    return (
       <div style={{
-        overflow: 'scroll',
-        position: 'absolute',
-        bottom: '33px',
-        width: '100%',
+        height: 'calc(100vh - 54px)',
+        marginTop: '10px',
+        background: 'white',
+      }}>
+        <div style={{
+          overflow: 'scroll',
+          position: 'absolute',
+          bottom: '33px',
+          width: '100%',
 
-        maxHeight: 'calc(100vh - 78px)'
-      }}
-      >{elems}
-        {bottomitem}
+          maxHeight: 'calc(100vh - 78px)'
+        }}
+        >{elems}
+          {bottomitem}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 const hrStyle = {
@@ -283,7 +304,7 @@ class App extends Component {
       hints: value ? slashHints.filter(hint => hint.hint.startsWith(value)) : [],
       timeInput: value
     }))
-    // setTimeout(() => this.messagesEnd.scrollIntoView({ behavior: 'smooth' }), 1000)
+    // setTimeout(() => this.messagesEnd.scrollIntoView({behavior: 'smooth' }), 1000)
   }
 }
 

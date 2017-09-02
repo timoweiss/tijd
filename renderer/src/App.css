@@ -48,6 +48,7 @@ input.main-input:focus {
   font-weight: lighter;
   flex-direction: row;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 .past-item:hover {
   background: #fbfbfb;
