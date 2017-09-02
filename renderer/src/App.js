@@ -78,7 +78,7 @@ const PastItems = ({ items, bottomitem }) => {
     const creationDate = moment().dayOfYear(day);
     elems.push(
       <DelimiterItem key={'delimiter_' + day} dateString={creationDate.format('dddd, MMMM Do YYYY')} />,
-      ...itemsGroupedByDay[day].map(item => console.log({ item }) || <PastItem key={item.k} item={item} />)
+      ...itemsGroupedByDay[day].map(item => <PastItem key={item.k} item={item} />)
     );
   });
 
