@@ -102,28 +102,22 @@ function createWindow() {
   };
 
 
-  const openWindow = () => {
+  const toggleApp = () => {
     console.log('click');
     if (!mainWindow) {
       createBrowserWindow();
     }
-
-    mainWindow.show();
+    if (mainWindow.isVisible()) {
+      mainWindow.hide();
+    } else {
+      mainWindow.show();
+    }
   };
   createBrowserWindow();
 
+  tray.on('click', toggleApp);
 
-  tray.on('click', openWindow);
-  const showWindow = () => {
-    console.log('CmdOrCtrl+Shift+U is pressed');
-    if (!mainWindow || !mainWindow.isFocused()) {
-      openWindow();
-    } else {
-      mainWindow.hide();
-    }
-  };
-
-  if (!shortcuts.onOpen(showWindow)) {
+  if (!shortcuts.onOpen(toggleApp)) {
     console.error('registering shortcut failed');
   }
 }
