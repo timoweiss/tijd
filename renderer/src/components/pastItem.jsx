@@ -9,7 +9,7 @@ const PastItem = ({ item, showEdit }) => (
   <div className="past-item">
     <span>{item.name}</span>
     <Time item={item} />
-    {showEdit ? <div style={{ width: '100%' }}>
+    {showEdit && <div style={{ width: '100%' }}>
       <hr />
       <InputRange
         maxValue={20}
@@ -17,7 +17,7 @@ const PastItem = ({ item, showEdit }) => (
         value={{ min: 2, max: 10 }}
         onChange={value => this.setState({ value })}
       />
-      edit view</div> : null}
+      edit view</div>}
   </div>
 );
 

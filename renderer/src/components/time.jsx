@@ -13,7 +13,7 @@ export const TimeContent = ({ item }) => (
 );
 
 export const PluralSingular = ({ num, singular }) =>
-  (num ? <span>{num} {num > 1 ? `${singular}s` : singular} </span> : null);
+  (num && <span>{num} {num > 1 ? `${singular}s` : singular} </span>);
 
 
 export const Time = ({ item }) => (
