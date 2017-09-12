@@ -22,6 +22,7 @@ export default class PastItems extends React.Component {
     const days = Object.keys(itemsGroupedByDay);
     const elems = [];
 
+    // render PastItems grouped by day, delimited by DelimiterItems
     days.forEach((day) => {
       const creationDate = moment().dayOfYear(day);
       elems.push(
