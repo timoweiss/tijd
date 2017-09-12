@@ -75,6 +75,10 @@ class App extends React.Component {
 
 
   componentDidMount() {
+    if (this.inputField) {
+      this.inputField.focus();
+    }
+    window.addEventListener('focus', () => this.inputField && this.inputField.focus());
     document.addEventListener('keydown', (event) => {
       // ESC
       if (event.keyCode === 27) {
@@ -224,6 +228,7 @@ class App extends React.Component {
             placeholder="Type what you are doing..."
             value={this.state.timeInput}
             onChange={this.onInputChange}
+            ref={(input) => { this.inputField = input; }}
             className="main-input"
           />
         </form>
