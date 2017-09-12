@@ -12,12 +12,7 @@ const typeEmojiMap = {
 };
 
 const PastItem = ({ item, showEdit }) => (
-  <div
-    className="past-item"
-    style={{
-      background: item.type ? 'white' : null,
-    }}
-  >
+  <div className="past-item">
     <span>{typeEmojiMap[item.type] ? typeEmojiMap[item.type] : item.name}</span>
     <Time item={item} />
     {showEdit && <div style={{ width: '100%' }}>
