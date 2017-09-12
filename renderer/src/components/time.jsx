@@ -12,8 +12,12 @@ export const TimeContent = ({ item }) => (
   </div>
 );
 
-export const PluralSingular = ({ num, singular }) =>
-  (num && <span>{num} {num > 1 ? `${singular}s` : singular} </span>);
+export const PluralSingular = ({ num, singular }) => {
+  if (num !== undefined) {
+    return (<span>{num} {num > 1 ? `${singular}s` : singular} </span>);
+  }
+  return null;
+};
 
 
 export const Time = ({ item }) => (
