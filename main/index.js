@@ -8,16 +8,20 @@ const path = require('path');
 const url = require('url');
 const fs = require('fs');
 
-const logFile = path.join((electron.app || electron.remote.app).getPath('userData'), 'logs.jsonl');
+const isProd = process.env.NODE_ENV === 'prod';
+
+const logFile = isProd ? path.join((electron.app || electron.remote.app).getPath('userData'), 'logs.jsonl') : path.join(__dirname, '..', 'logs.jsonl');
 try {
+  console.log({ logFile });
   fs.openSync(logFile, 'a');
-} catch (e) { }
+} catch (e) {
+  console.log('error calling openSync');
+}
 
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = 'prod';
 }
 
-const isProd = process.env.NODE_ENV === 'prod';
 
 const shortcuts = require('./shortcuts');
 
