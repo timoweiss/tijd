@@ -8,16 +8,20 @@ const path = require('path');
 const url = require('url');
 const fs = require('fs');
 
-const logFile = path.join((electron.app || electron.remote.app).getPath('userData'), 'logs.jsonl');
+const isProd = process.env.NODE_ENV === 'prod';
+
+const logFile = isProd ? path.join((electron.app || electron.remote.app).getPath('userData'), 'logs.jsonl') : path.join(__dirname, '..', 'logs.jsonl');
 try {
+  console.log({ logFile });
   fs.openSync(logFile, 'a');
-} catch (e) { }
+} catch (e) {
+  console.log('error calling openSync');
+}
 
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = 'prod';
 }
 
-const isProd = process.env.NODE_ENV === 'prod';
 
 const shortcuts = require('./shortcuts');
 
@@ -102,28 +106,24 @@ function createWindow() {
   };
 
 
-  const openWindow = () => {
+
+  const toggleApp = () => {
     console.log('click');
     if (!mainWindow) {
       createBrowserWindow();
     }
-
-    mainWindow.show();
+    if (mainWindow.isVisible()) {
+      mainWindow.hide();
+    } else {
+      mainWindow.show();
+    }
   };
   createBrowserWindow();
 
+  tray.on('click', toggleApp);
 
-  tray.on('click', openWindow);
-  const showWindow = () => {
-    console.log('CmdOrCtrl+Shift+U is pressed');
-    if (!mainWindow || !mainWindow.isFocused()) {
-      openWindow();
-    } else {
-      mainWindow.hide();
-    }
-  };
 
-  if (!shortcuts.onOpen(showWindow)) {
+  if (!shortcuts.onOpen(toggleApp)) {
     console.error('registering shortcut failed');
   }
 }
