@@ -15,7 +15,7 @@ export const TimeContent = ({ item }) => (
 
 // adds an 's' to var singular if num is bigger than one
 export const PluralSingular = ({ num, singular }) => {
-  if (num !== undefined) {
+  if (num !== undefined && num > 0) {
     return (<span>{num} {num > 1 ? `${singular}s` : singular} </span>);
   }
   return null;
