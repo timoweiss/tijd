@@ -9,6 +9,11 @@ const path = require('path');
 const url = require('url');
 const fs = require('fs');
 
+// default is prod
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = 'prod';
+}
+
 const isProd = process.env.NODE_ENV === 'prod';
 
 const logFile = isProd ? path.join((electron.app || electron.remote.app).getPath('userData'), 'logs.jsonl') : path.join(__dirname, '..', 'logs.jsonl');
@@ -17,10 +22,6 @@ try {
   fs.openSync(logFile, 'a');
 } catch (e) {
   console.log('error calling openSync');
-}
-
-if (!process.env.NODE_ENV) {
-  process.env.NODE_ENV = 'prod';
 }
 
 
