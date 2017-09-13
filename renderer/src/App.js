@@ -1,107 +1,37 @@
+
+// eslint-disable-next-line
 import React, { Component } from 'react';
 
-import './App.css';
 import { Tooltip } from 'element-react';
-import ReactTooltip from 'react-tooltip'
-// import TA from 'time-ago'; 
+
+// eslint-disable-next-line
 import 'element-theme-default';
-import moment from 'moment';
 
 
 import { ipcRenderer } from 'electron';
 
-import { getDetailedTimeFromTo, getDetailedTimeToNow } from './helper/zeit';
+import './App.css';
+
+
 import Caret from './components/caret';
+import PastItems from './components/pastItems';
 
 const lightGrey = 'rgb(243, 243, 243)';
 
 
+// const getPercentage = (start, end, base = 28800000) => Math.round(base / (new Date(end) - new Date(start)));
 
 
 function putOngoing(obj) {
-  localStorage.setItem('ongoing-item', JSON.stringify(obj));
+  window.localStorage.setItem('ongoing-item', JSON.stringify(obj));
 }
 function getOngoing() {
-  const ongoing = localStorage.getItem('ongoing-item');
+  const ongoing = window.localStorage.getItem('ongoing-item');
   if (ongoing) {
     return JSON.parse(ongoing);
   }
   return null;
 }
-
-const groupBySameday = items => items.reduce(
-  (groups, item) => {
-    const dayOfYear = moment(item.created).dayOfYear();
-    groups[dayOfYear] = groups[dayOfYear] || [];
-    groups[dayOfYear].push(item);
-    return groups;
-  },
-  {});
-
-const ta = {
-  duration: (date, end) => moment(date).from(end || new Date(), true),
-  ago: (date) => moment(date).fromNow(),
-};
-const PluralSingular = ({ num, singular }) => num ? <span>{num} {num > 1 ? singular + 's' : singular} </span> : null;
-const DetailedTime = ({ from, to }) => {
-  const dt = to ? getDetailedTimeFromTo(from, to) : getDetailedTimeToNow(from);
-  return (
-    <div>
-      <PluralSingular num={dt.days} singular="day" />
-      <PluralSingular num={dt.hours} singular="hour" />
-      <PluralSingular num={dt.days} singular="day" />
-      <PluralSingular num={dt.minutes} singular="minute" />
-      <PluralSingular num={dt.seconds} singular="second" />
-    </div>
-  )
-};
-
-const TimeContent = ({ item }) => <div data-tip data-for={item.k + 'tt'}><span>{item.finished ? ta.duration(item.created, item.finished) : 'started ' + ta.ago(item.created)}</span></div>;
-
-const Time = ({ item }) => {
-  return (
-    <div style={{ fontSize: '10px' }}>
-      <ReactTooltip place="left" effect="solid" id={item.k + 'tt'}><DetailedTime from={item.created} to={item.finished} /></ReactTooltip>
-      <TimeContent item={item} />
-    </div>
-  );
-};
-const DelimiterItem = ({ dateString }) => <div className="delimiter-item"><span>{dateString}</span></div>;
-
-const PastItem = ({ item }) => <div className="past-item"><span>{item.name}</span><Time item={item} /></div>;
-
-const PastItems = ({ items, bottomitem }) => {
-  const itemsGroupedByDay = groupBySameday(items);
-  const days = Object.keys(itemsGroupedByDay);
-  const elems = [];
-  days.forEach(day => {
-    const creationDate = moment().dayOfYear(day);
-    elems.push(
-      <DelimiterItem key={'delimiter_' + day} dateString={creationDate.format('dddd, MMMM Do YYYY')} />,
-      ...itemsGroupedByDay[day].map(item => console.log({ item }) || <PastItem key={item.k} item={item} />)
-    );
-  });
-
-  return (
-    <div style={{
-      height: 'calc(100vh - 54px)',
-      marginTop: '10px',
-      background: 'white',
-    }}>
-      <div style={{
-        overflow: 'scroll',
-        position: 'absolute',
-        bottom: '33px',
-        width: '100%',
-
-        maxHeight: 'calc(100vh - 78px)'
-      }}
-      >{elems}
-        {bottomitem}
-      </div>
-    </div>
-  );
-};
 
 const hrStyle = {
   display: 'block',
@@ -110,79 +40,39 @@ const hrStyle = {
   borderTop: '1px solid rgb(173, 173, 173)',
   margin: '0 0 -1px',
   padding: 0,
-}
+};
 
 const slashHints = [{
   hint: '/hi',
   id: 'hi',
-  create: name => ({ k: Date.now() + 'hi', name, created: Date.now(), type: 'hi' }),
+  create: name => ({ k: `${Date.now()}hi`, name, created: Date.now(), type: 'hi' }),
 }, {
   hint: '/bye',
   id: 'bye',
-  create: name => ({ k: Date.now() + 'bye', name, created: Date.now(), type: 'bye' }),
+  create: name => ({ k: `${Date.now()}bye`, name, created: Date.now(), type: 'bye' }),
 }, {
   hint: '/break',
   id: 'break',
-  create: name => ({ k: Date.now() + 'bye', name, created: Date.now(), type: 'break' }),
+  create: name => ({ k: `${Date.now()}bye`, name, created: Date.now(), type: 'break' }),
 }];
 
-const BottomItem = ({ inputRef }) => <div key='bottom_item' style={{ float: "left", clear: "both" }} ref={inputRef} />
+const BottomItem = ({ inputRef }) => <div key="bottom_item" style={{ float: 'left', clear: 'both' }} ref={inputRef} />;
 
-class App extends Component {
-  state = {
-    timeInput: '',
-    pastItems: [],
-    hints: [],
-    interval: null,
-    h: 0,
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      timeInput: '',
+      pastItems: [],
+      hints: [],
+      interval: null,
+      h: 0,
+    };
+
+    this.addTime = this.addTime.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
   }
-  render() {
 
-    return (
-      <div className="App" style={{ background: 'transparent', height: '100vh', margin: '0 5px', position: 'relative' }}>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Caret />
-
-        </div>
-        <span style={{
-          color: '#717171',
-          background: lightGrey,
-          fontWeight: 'bold',
-          fontSize: '11px',
-          padding: '10px 0',
-          margin: '-1px 0 0',
-          width: '100%',
-          textAlign: 'center',
-          float: 'left',
-          borderBottom: '1px solid rgb(173, 173, 173)',
-          borderTopLeftRadius: '5px',
-          borderTopRightRadius: '5px',
-          boxShadow: '0px 1px 3px 0 rgba(0,0,0,.2)'
-        }}>TIJD</span>
-
-        <PastItems bottomitem={<BottomItem inputRef={input => this.messagesEnd = input} />} items={this.state.pastItems} />
-
-        <form onSubmit={this.addTime} style={{ position: 'absolute', left: 0, bottom: 0, width: '100%' }}>
-          <hr style={hrStyle} />
-          <Tooltip
-            placement="top"
-            effect="dark"
-            width="400"
-            visible={!!this.state.hints.length}
-            content={<div>{this.state.hints.map(hint => <p key={hint.id}>{hint.hint}</p>)}</div>}
-          />
-
-          <input
-            type="text"
-            placeholder='Type what you are doing...'
-            value={this.state.timeInput}
-            onChange={this.onInputChange}
-            className="main-input"
-          />
-        </form>
-      </div>
-    );
-  }
 
   componentDidMount(a, b, c) {
     document.addEventListener('keydown', (event) => {
@@ -190,39 +80,52 @@ class App extends Component {
       if (event.keyCode === 27) {
         event.stopPropagation();
         event.preventDefault();
-        ipcRenderer.send('hide-app')
+        ipcRenderer.send('hide-app');
       }
-    })
+    });
 
-    console.log('sending', 'get-entries')
+    console.log('sending', 'get-entries');
 
     // load possible latest ongoing
     const ongoing = getOngoing();
 
     ipcRenderer.on('get-entries-resp', (event, data) => {
-      console.log({ data })
+      console.log({ data });
       if (ongoing) {
         data.push(ongoing);
       }
       this.setState({
-        pastItems: data
-      })
-    })
+        pastItems: data,
+      });
+    });
     ipcRenderer.send('get-entries');
 
-    this.setState((prevState) => ({
-      interval: setInterval(() => this.setState({ h: prevState.h + 1 }), 1000)
+    // TODO: setState should not be used in componentDidMount
+    // eslint-disable-next-line
+    this.setState(prevState => ({
+      interval: setInterval(() => this.setState({ h: prevState.h + 1 }), 1000),
     }));
-    console.log('comp did mount', { a, b, c })
+    console.log('comp did mount', { a, b, c });
   }
 
   componentWillUnmount() {
-    this.setState((prevState) => ({
-      interval: clearInterval(prevState.interval)
+    this.setState(prevState => ({
+      interval: clearInterval(prevState.interval),
     }));
   }
 
-  addTime = (event) => {
+  onInputChange(event) {
+    const { value } = event.target;
+
+    this.setState(prevState => ({
+      ...prevState,
+      hints: value ? slashHints.filter(hint => hint.hint.startsWith(value)) : [],
+      timeInput: value,
+    }));
+    // setTimeout(() => this.messagesEnd.scrollIntoView({behavior: 'smooth' }), 1000)
+  }
+
+  addTime(event) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -232,8 +135,7 @@ class App extends Component {
       return;
     }
 
-    this.setState(prevState => {
-
+    this.setState((prevState) => {
       const now = new Date().toISOString();
       // ongoing item
       const last = prevState.pastItems.pop();
@@ -256,12 +158,12 @@ class App extends Component {
           k: prevState.pastItems.length + 2 + Date.now(),
           name: text,
           created: now,
-        }
+        };
       }
       // add new ongoing
       putOngoing(newItem);
 
-      setTimeout(() => this.messagesEnd.scrollIntoView({ behavior: 'smooth' }), 0)
+      setTimeout(() => this.messagesEnd.scrollIntoView({ behavior: 'smooth' }), 0);
 
       return {
         ...prevState,
@@ -270,20 +172,64 @@ class App extends Component {
         // reset hint list
         hints: [],
         // reset text input
-        timeInput: ''
+        timeInput: '',
       };
     });
   }
 
-  onInputChange = (event) => {
-    const { value } = event.target;
 
-    this.setState(prevState => ({
-      ...prevState,
-      hints: value ? slashHints.filter(hint => hint.hint.startsWith(value)) : [],
-      timeInput: value
-    }))
-    // setTimeout(() => this.messagesEnd.scrollIntoView({ behavior: 'smooth' }), 1000)
+  render() {
+    return (
+      <div
+        className="App"
+        style={{ background: 'transparent', height: '100vh', margin: '0 5px', position: 'relative' }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Caret />
+
+        </div>
+        <span style={{
+          color: '#717171',
+          background: lightGrey,
+          fontWeight: 'bold',
+          fontSize: '11px',
+          padding: '10px 0',
+          margin: '-1px 0 0',
+          width: '100%',
+          textAlign: 'center',
+          float: 'left',
+          borderBottom: '1px solid rgb(173, 173, 173)',
+          borderTopLeftRadius: '5px',
+          borderTopRightRadius: '5px',
+          boxShadow: '0px 1px 3px 0 rgba(0,0,0,.2)',
+        }}
+        >TIJD</span>
+
+        <PastItems
+          bottomitem={<BottomItem inputRef={(input) => { this.messagesEnd = input; }} />}
+          items={this.state.pastItems}
+        />
+
+        <form onSubmit={this.addTime} style={{ position: 'absolute', left: 0, bottom: 0, width: '100%' }}>
+          <hr style={hrStyle} />
+          <Tooltip
+            placement="top"
+            effect="dark"
+            width="400"
+            visible={!!this.state.hints.length}
+            content={<div>{this.state.hints.map(hint => <p key={hint.id}>{hint.hint}</p>)}</div>}
+          />
+
+          <input
+            type="text"
+            placeholder="Type what you are doing..."
+            value={this.state.timeInput}
+            onChange={this.onInputChange}
+            className="main-input"
+          />
+        </form>
+      </div>
+    );
   }
 }
 
