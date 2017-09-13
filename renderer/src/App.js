@@ -74,7 +74,11 @@ class App extends React.Component {
   }
 
 
-  componentDidMount(a, b, c) {
+  componentDidMount() {
+    if (this.inputField) {
+      this.inputField.focus();
+    }
+    window.addEventListener('focus', () => this.inputField && this.inputField.focus());
     document.addEventListener('keydown', (event) => {
       // ESC
       if (event.keyCode === 27) {
@@ -105,7 +109,6 @@ class App extends React.Component {
     this.setState(prevState => ({
       interval: setInterval(() => this.setState({ h: prevState.h + 1 }), 1000),
     }));
-    console.log('comp did mount', { a, b, c });
   }
 
   componentWillUnmount() {
@@ -225,6 +228,7 @@ class App extends React.Component {
             placeholder="Type what you are doing..."
             value={this.state.timeInput}
             onChange={this.onInputChange}
+            ref={(input) => { this.inputField = input; }}
             className="main-input"
           />
         </form>
