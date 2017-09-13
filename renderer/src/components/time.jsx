@@ -44,7 +44,6 @@ export const DetailedTime = ({ from, to }) => {
     <div>
       <PluralSingular num={dt.days} singular="day" />
       <PluralSingular num={dt.hours} singular="hour" />
-      <PluralSingular num={dt.days} singular="day" />
       <PluralSingular num={dt.minutes} singular="minute" />
       <PluralSingular num={dt.seconds} singular="second" />
     </div>
