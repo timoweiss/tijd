@@ -3,10 +3,18 @@
 import React from 'react';
 import * as moment from 'moment';
 import { groupBySameday } from '../helper/zeit';
+import { DetailedTime } from './time';
 
 import PastItem from './pastItem';
 
 import DelimiterItem from './helper';
+
+function getFirstAndLast(items) {
+  return {
+    first: items[0],
+    last: items[items.length - 1],
+  };
+}
 
 export default class PastItems extends React.Component {
   constructor(props) {
@@ -25,9 +33,18 @@ export default class PastItems extends React.Component {
     // render PastItems grouped by day, delimited by DelimiterItems
     days.forEach((day) => {
       const creationDate = moment().dayOfYear(day);
+      const itemsOnThatDay = itemsGroupedByDay[day];
+
+      const { first, last } = getFirstAndLast(itemsOnThatDay);
+
+
       elems.push(
-        <DelimiterItem key={`delimiter_${day}`} dateString={creationDate.format('dddd, MMMM Do YYYY')} />,
-        ...itemsGroupedByDay[day].map(item => (
+        <DelimiterItem
+          key={`delimiter_${day}`}
+          totalTime={<DetailedTime from={first.created} to={last.finished} />}
+          dateString={creationDate.format('dddd, MMMM Do YYYY')}
+        />,
+        ...itemsOnThatDay.map(item => (
           <span
             role="presentation"
             key={item.k}

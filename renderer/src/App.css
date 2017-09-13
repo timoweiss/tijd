@@ -68,3 +68,19 @@ input.main-input:focus {
   text-transform: uppercase;
 
 }
+
+.delimiter-item .total-time {
+  display: none;
+}
+
+
+.delimiter-item:hover .total-time {
+  display: block;
+  text-transform: lowercase;
+  position: absolute;
+  right: 7px;
+  padding-left: 7px; 
+  box-shadow: 0 9px 0px 0px rgb(243, 243, 243), 0 -9px 0px 0px rgb(243, 243, 243), 0 0 15px -4px rgb(243, 243, 243), -12px 0 5px 0px rgba(243, 243, 243, 1);
+  background: rgb(243, 243, 243);
+  transform: translateZ(1px)
+}
