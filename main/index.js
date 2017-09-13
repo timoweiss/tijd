@@ -106,6 +106,7 @@ function createWindow() {
   };
 
 
+
   const toggleApp = () => {
     console.log('click');
     if (!mainWindow) {
@@ -120,6 +121,7 @@ function createWindow() {
   createBrowserWindow();
 
   tray.on('click', toggleApp);
+
 
   if (!shortcuts.onOpen(toggleApp)) {
     console.error('registering shortcut failed');

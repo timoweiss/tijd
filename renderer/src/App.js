@@ -109,6 +109,7 @@ class App extends React.Component {
     this.setState(prevState => ({
       interval: setInterval(() => this.setState({ h: prevState.h + 1 }), 1000),
     }));
+
   }
 
   componentWillUnmount() {
