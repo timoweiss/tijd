@@ -106,7 +106,6 @@ function createWindow() {
   };
 
 
-
   const toggleApp = () => {
     console.log('click');
     if (!mainWindow) {
