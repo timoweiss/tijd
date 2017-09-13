@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 const electron = require('electron');
 // Module to control application life.
 
