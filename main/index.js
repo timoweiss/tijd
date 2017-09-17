@@ -44,7 +44,9 @@ ipcMain.on('get-entries', (event) => {
     if (err) throw err;
     const jsonArray = data.split('\n');
     console.log({ jsonArray });
-    const a = jsonArray.filter(jsonString => !!jsonString).map(jsonString => JSON.parse(jsonString));
+    const a = jsonArray
+      .filter(jsonString => !!jsonString)
+      .map(jsonString => JSON.parse(jsonString));
     event.sender.send('get-entries-resp', a);
   });
 });
