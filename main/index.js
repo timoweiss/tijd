@@ -12,36 +12,50 @@ const shortcuts = require('./shortcuts');
 
 const { app, BrowserWindow, Tray, Menu, globalShortcut, ipcMain } = electron;
 
+let NODE_ENV = process.env.NODE_ENV;
+
 // default is prod
-if (!process.env.NODE_ENV) {
-  process.env.NODE_ENV = 'prod';
+if (!NODE_ENV) {
+  NODE_ENV = 'prod';
 }
 
-const isProd = process.env.NODE_ENV === 'prod';
+const isProd = NODE_ENV === 'prod';
 
 const envConfig = {
   dev: {
     width: 1330,
     height: 800,
+    resizable: true,
+    movable: true,
     url: 'http://localhost:3000',
     dataPath: path.join(__dirname, '..', 'logs.jsonl'),
   },
   prodlike: {
     width: 330,
     height: 400,
+    resizable: true,
+    movable: true,
     url: 'http://localhost:3000',
     dataPath: path.join(__dirname, '..', 'logs.jsonl'),
   },
   prod: {
     width: 330,
     height: 400,
-    url: path.join(__dirname, '..', 'renderer', 'build', 'index.html'),
+    resizable: false,
+    movable: false,
+    url: url.format({
+      pathname: path.join(__dirname, '..', 'renderer', 'build', 'index.html'),
+      protocol: 'file:',
+      slashes: true,
+    }),
     dataPath: path.join((electron.app || electron.remote.app).getPath('userData'), 'logs.jsonl'),
   },
 
 };
 
-const logFile = envConfig[process.env.NODE_ENV].dataPath;
+const config = envConfig[NODE_ENV];
+
+const logFile = config.dataPath;
 try {
   console.log({ logFile });
   fs.openSync(logFile, 'a');
@@ -62,21 +76,18 @@ ipcMain.on('new-entry', (event, arg) => {
 });
 
 ipcMain.on('get-entries', (event) => {
-  console.log('getting entries');
   fs.readFile(logFile, 'utf-8', (err, data) => {
     if (err) throw err;
     const jsonArray = data.split('\n');
     console.log({ jsonArray });
-    const a = jsonArray
+    const parsedData = jsonArray
       .filter(jsonString => !!jsonString)
       .map(jsonString => JSON.parse(jsonString));
-    event.sender.send('get-entries-resp', a);
+    event.sender.send('get-entries-resp', parsedData);
   });
 });
 
-ipcMain.on('hide-app', () => {
-  mainWindow.hide();
-});
+ipcMain.on('hide-app', () => mainWindow.hide());
 
 function createWindow() {
   // Create the browser window.
@@ -99,9 +110,8 @@ function createWindow() {
     const trayBounds = tray.getBounds();
     console.log({ trayBounds });
 
-    mainWindow = new BrowserWindow(Object.assign(envConfig[process.env.NODE_ENV], {
+    mainWindow = new BrowserWindow(Object.assign(config, {
       title: 'Tijd',
-      resizable: !isProd,
       show: true,
       fullscreenable: false,
 
@@ -109,7 +119,6 @@ function createWindow() {
       minimizable: false,
       transparent: true,
       frame: false,
-      movable: !isProd,
       y: 25,
       x: trayBounds.x - 154,
       webPreferences: {
@@ -119,20 +128,12 @@ function createWindow() {
     }));
 
 
-    const prod = url.format({
-      pathname: path.join(__dirname, '..', 'renderer', 'build', 'index.html'),
-      protocol: 'file:',
-      slashes: true,
-    });
-    const dev = 'http://localhost:3000';
-    console.log(process.env.NODE_ENV === 'dev' ? dev : prod);
-    mainWindow.loadURL(process.env.NODE_ENV === 'dev' ? dev : prod);
+    mainWindow.loadURL(config.url);
     mainWindow.on('blur', () => mainWindow.hide());
   };
 
 
   const toggleApp = () => {
-    console.log('click');
     if (!mainWindow) {
       createBrowserWindow();
     }
