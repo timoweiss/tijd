@@ -19,8 +19,7 @@
     "tutorial",
     "demo"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "license": "MIT",
   "build": {
     "appId": "com.timo-weiss.tijd",
     "mac": {
