@@ -2,7 +2,7 @@
 // eslint-disable-next-line
 import React, { Component } from 'react';
 
-import { Tooltip } from 'element-react';
+import Autosuggest from 'react-autosuggest';
 
 // eslint-disable-next-line
 import 'element-theme-default';
@@ -30,6 +30,25 @@ function getOngoing() {
   return null;
 }
 
+function renderSuggestion(suggestion) {
+  return (
+    <div style={{ cursor: 'pointer' }}>
+      <span style={{
+        fontSize: '13px',
+        width: '100%',
+        float: 'left',
+        clear: 'both',
+      }}
+      >{suggestion.hint}</span>
+      <span style={{
+        fontSize: '11px',
+        color: '#717171',
+      }}
+      >{suggestion.description}</span>
+    </div>
+  );
+}
+
 const hrStyle = {
   display: 'block',
   height: '1px',
@@ -41,14 +60,17 @@ const hrStyle = {
 
 const slashHints = [{
   hint: '/hi',
+  description: 'start working',
   id: 'hi',
   create: name => ({ k: `${Date.now()}hi`, name, created: Date.now(), type: 'hi' }),
 }, {
   hint: '/bye',
+  description: 'end working',
   id: 'bye',
   create: name => ({ k: `${Date.now()}bye`, name, created: Date.now(), type: 'bye' }),
 }, {
   hint: '/break',
+  description: 'take a break from working',
   id: 'break',
   create: name => ({ k: `${Date.now()}bye`, name, created: Date.now(), type: 'break' }),
 }];
@@ -60,13 +82,15 @@ class App extends React.Component {
     this.state = {
       timeInput: '',
       pastItems: [],
-      hints: [],
+      hints: slashHints,
       interval: null,
       h: 0,
     };
 
     this.addTime = this.addTime.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
+    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
+    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
   }
 
   componentWillMount() {
@@ -112,15 +136,26 @@ class App extends React.Component {
     }));
   }
 
-  onInputChange(event) {
-    const { value } = event.target;
-
+  onInputChange(event, { newValue, method }) {
+    console.log({ newValue, method });
+    const changeHintList = method !== 'down' && method !== 'up';
     this.setState(prevState => ({
       ...prevState,
-      hints: value ? slashHints.filter(hint => hint.hint.startsWith(value)) : [],
-      timeInput: value,
+      hints: newValue && changeHintList ? slashHints.filter(hint => hint.hint.startsWith(newValue)) : prevState.hints,
+      timeInput: newValue,
     }));
     // setTimeout(() => this.messagesEnd.scrollIntoView({behavior: 'smooth' }), 1000)
+  }
+
+
+  onSuggestionsFetchRequested({ value, reason }) {
+    console.log(this, { value, reason });
+  }
+
+  onSuggestionsClearRequested() {
+    this.setState({
+      hints: [],
+    });
   }
 
   addTime(event) {
@@ -168,7 +203,7 @@ class App extends React.Component {
         // put back the now completed ongoing and the new ongoing 
         pastItems: [...prevState.pastItems, last, newItem],
         // reset hint list
-        hints: [],
+        // hints: [],
         // reset text input
         timeInput: '',
       };
@@ -177,6 +212,12 @@ class App extends React.Component {
 
 
   render() {
+    // Autosuggest will pass through all these props to the input.
+    const inputProps = {
+      placeholder: 'Type what you are doing...',
+      value: this.state.timeInput,
+      onChange: this.onInputChange,
+    };
     return (
       <div
         className="App"
@@ -195,20 +236,15 @@ class App extends React.Component {
 
         <form onSubmit={this.addTime} style={{ position: 'absolute', left: 0, bottom: 0, width: '100%' }}>
           <hr style={hrStyle} />
-          <Tooltip
-            placement="top"
-            effect="dark"
-            width="400"
-            visible={!!this.state.hints.length}
-            content={<div>{this.state.hints.map(hint => <p key={hint.id}>{hint.hint}</p>)}</div>}
-          />
 
-          <input
-            type="text"
-            placeholder="Type what you are doing..."
-            value={this.state.timeInput}
-            onChange={this.onInputChange}
-            ref={(input) => { this.inputField = input; }}
+          <Autosuggest
+            suggestions={this.state.hints}
+            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+            getSuggestionValue={val => val.hint}
+            renderSuggestion={renderSuggestion}
+            ref={(value) => { this.inputField = value && value.input ? value.input : null; }}
+            inputProps={inputProps}
             className="main-input"
           />
         </form>
