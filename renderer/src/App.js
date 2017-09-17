@@ -12,7 +12,7 @@ import { ipcRenderer } from 'electron';
 
 import './App.css';
 
-
+import { BottomItem } from './components/helper';
 import Caret from './components/caret';
 import PastItems from './components/pastItems';
 
@@ -56,7 +56,6 @@ const slashHints = [{
   create: name => ({ k: `${Date.now()}bye`, name, created: Date.now(), type: 'break' }),
 }];
 
-const BottomItem = ({ inputRef }) => <div key="bottom_item" style={{ float: 'left', clear: 'both' }} ref={inputRef} />;
 
 class App extends React.Component {
   constructor(props) {
