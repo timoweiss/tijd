@@ -73,6 +73,11 @@ class App extends React.Component {
     this.onInputChange = this.onInputChange.bind(this);
   }
 
+  componentWillMount() {
+    this.setState(prevState => ({
+      interval: setInterval(() => this.setState({ h: prevState.h + 1 }), 1000),
+    }));
+  }
 
   componentDidMount() {
     if (this.inputField) {
@@ -103,12 +108,6 @@ class App extends React.Component {
       });
     });
     ipcRenderer.send('get-entries');
-
-    // TODO: setState should not be used in componentDidMount
-    // eslint-disable-next-line
-    this.setState(prevState => ({
-      interval: setInterval(() => this.setState({ h: prevState.h + 1 }), 1000),
-    }));
   }
 
   componentWillUnmount() {
