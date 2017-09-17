@@ -4,7 +4,9 @@
   "description": "Simple time tracking",
   "main": "main/index.js",
   "scripts": {
-    "start": "NODE_ENV=dev electron .",
+    "start": "electron .",
+    "dev-productionlike": "NODE_ENV=prodlike electron .",
+    "dev": "NODE_ENV=dev electron .",
     "debug": "NODE_ENV=dev electron --inspect-brk .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
