@@ -32,6 +32,7 @@
     "preact": "^8.2.4",
     "preact-compat": "^3.17.0",
     "promise": "8.0.1",
+    "react-autosuggest": "^9.3.2",
     "react-dev-utils": "^3.1.0",
     "react-error-overlay": "^1.0.10",
     "react-input-range": "^1.2.1",
