@@ -3,9 +3,9 @@
 import React from 'react';
 
 const DelimiterItem = ({ dateString, totalTime }) => (
+export const DelimiterItem = ({ dateString, totalTime }) => (
   <div className="delimiter-item">
     <span>{dateString}</span>
     {totalTime && <span className="total-time">{totalTime}</span>}
   </div>
 );
-export default DelimiterItem;

@@ -7,7 +7,7 @@ import { DetailedTime } from './time';
 
 import PastItem from './pastItem';
 
-import DelimiterItem from './helper';
+import { DelimiterItem } from './helper';
 
 function getFirstAndLast(items) {
   return {
