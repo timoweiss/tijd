@@ -19,6 +19,22 @@ if (!process.env.NODE_ENV) {
 
 const isProd = process.env.NODE_ENV === 'prod';
 
+const envConfig = {
+  dev: {
+    width: 1330,
+    height: 800,
+  },
+  prodlike: {
+    width: 330,
+    height: 400,
+  },
+  prod: {
+    width: 330,
+    height: 400,
+  },
+
+};
+
 const logFile = isProd ? path.join((electron.app || electron.remote.app).getPath('userData'), 'logs.jsonl') : path.join(__dirname, '..', 'logs.jsonl');
 try {
   console.log({ logFile });
@@ -77,9 +93,7 @@ function createWindow() {
     const trayBounds = tray.getBounds();
     console.log({ trayBounds });
 
-    mainWindow = new BrowserWindow({
-      width: isProd ? 330 : 1330,
-      height: isProd ? 400 : 800,
+    mainWindow = new BrowserWindow(Object.assign(envConfig[process.env.NODE_ENV], {
       title: 'Tijd',
       resizable: !isProd,
       show: true,
@@ -96,7 +110,7 @@ function createWindow() {
         backgroundThrottling: false,
         devTools: !isProd,
       },
-    });
+    }));
 
 
     const prod = url.format({
