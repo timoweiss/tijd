@@ -23,19 +23,25 @@ const envConfig = {
   dev: {
     width: 1330,
     height: 800,
+    url: 'http://localhost:3000',
+    dataPath: path.join(__dirname, '..', 'logs.jsonl'),
   },
   prodlike: {
     width: 330,
     height: 400,
+    url: 'http://localhost:3000',
+    dataPath: path.join(__dirname, '..', 'logs.jsonl'),
   },
   prod: {
     width: 330,
     height: 400,
+    url: path.join(__dirname, '..', 'renderer', 'build', 'index.html'),
+    dataPath: path.join((electron.app || electron.remote.app).getPath('userData'), 'logs.jsonl'),
   },
 
 };
 
-const logFile = isProd ? path.join((electron.app || electron.remote.app).getPath('userData'), 'logs.jsonl') : path.join(__dirname, '..', 'logs.jsonl');
+const logFile = envConfig[process.env.NODE_ENV].dataPath;
 try {
   console.log({ logFile });
   fs.openSync(logFile, 'a');
