@@ -98,7 +98,7 @@ function createWindow() {
 
   ]);
 
-  tray.setToolTip('This is my application.');
+  tray.setToolTip('Track your time!');
 
 
   tray.on('right-click', () => {
