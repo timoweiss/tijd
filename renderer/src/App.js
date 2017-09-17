@@ -16,9 +16,6 @@ import { BottomItem } from './components/helper';
 import Caret from './components/caret';
 import PastItems from './components/pastItems';
 
-const lightGrey = 'rgb(243, 243, 243)';
-
-
 // const getPercentage = (start, end, base = 28800000) => Math.round(base / (new Date(end) - new Date(start)));
 
 
@@ -189,22 +186,7 @@ class App extends React.Component {
           <Caret />
 
         </div>
-        <span style={{
-          color: '#717171',
-          background: lightGrey,
-          fontWeight: 'bold',
-          fontSize: '11px',
-          padding: '10px 0',
-          margin: '-1px 0 0',
-          width: '100%',
-          textAlign: 'center',
-          float: 'left',
-          borderBottom: '1px solid rgb(173, 173, 173)',
-          borderTopLeftRadius: '5px',
-          borderTopRightRadius: '5px',
-          boxShadow: '0px 1px 3px 0 rgba(0,0,0,.2)',
-        }}
-        >TIJD</span>
+        <span className="header">TIJD</span>
 
         <PastItems
           bottomitem={<BottomItem inputRef={(input) => { this.messagesEnd = input; }} />}
