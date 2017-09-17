@@ -21,5 +21,6 @@ npm start
 ```
 ### Start the election app
 ```
+# ./
 npm run dev
 ```
