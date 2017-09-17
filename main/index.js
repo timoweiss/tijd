@@ -3,11 +3,14 @@ const electron = require('electron');
 // Module to control application life.
 
 // Module to create native browser window.
-const { app, BrowserWindow, Tray, Menu, globalShortcut, ipcMain } = electron;
 
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
+
+const shortcuts = require('./shortcuts');
+
+const { app, BrowserWindow, Tray, Menu, globalShortcut, ipcMain } = electron;
 
 // default is prod
 if (!process.env.NODE_ENV) {
@@ -24,8 +27,6 @@ try {
   console.log('error calling openSync');
 }
 
-
-const shortcuts = require('./shortcuts');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
