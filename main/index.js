@@ -153,9 +153,10 @@ function createWindow() {
 
     mainWindow.loadURL(config.url);
     mainWindow.on('blur', () => mainWindow.hide());
+
+    // don't know why, but this seems to fix the initial shadow problem
+    setTimeout(() => mainWindow.show(), 1000);
   };
-
-
   const toggleApp = () => {
     if (!mainWindow) {
       createBrowserWindow();
