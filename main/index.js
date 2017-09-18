@@ -159,6 +159,7 @@ function createWindow() {
   const toggleApp = () => {
     if (!mainWindow) {
       createBrowserWindow();
+      return;
     }
     if (mainWindow.isVisible()) {
       mainWindow.hide();
