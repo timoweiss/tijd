@@ -134,15 +134,13 @@ function createWindow() {
   const createBrowserWindow = () => {
     mainWindow = new BrowserWindow(Object.assign(config, {
       title: 'Tijd',
-      show: true,
+      show: false,
       fullscreenable: false,
 
       maximizable: false,
       minimizable: false,
       transparent: true,
       frame: false,
-      y: 25,
-      x: trayBounds.x - 154,
       webPreferences: {
         backgroundThrottling: false,
         devTools: !isProd,
