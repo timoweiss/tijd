@@ -119,11 +119,19 @@ function createWindow() {
     console.log('right-click');
     tray.popUpContextMenu(contextMenu);
   });
+  const updateWindowPosition = (trayBounds, window) => {
+    const { screen } = electron;
+    const { workArea } = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
+    const windowSize = window.getSize();
+
+    const trayCenter = trayBounds.x + (trayBounds.width / 2);
+    const horizontalPosition = trayCenter - (windowSize[0] / 2);
+    const verticalPosition = workArea.y + 5;
+    window.setPosition(horizontalPosition, verticalPosition);
+  };
+
 
   const createBrowserWindow = () => {
-    const trayBounds = tray.getBounds();
-    console.log({ trayBounds });
-
     mainWindow = new BrowserWindow(Object.assign(config, {
       title: 'Tijd',
       show: true,
@@ -141,6 +149,7 @@ function createWindow() {
       },
     }));
 
+    updateWindowPosition(tray.getBounds(), mainWindow);
 
     mainWindow.loadURL(config.url);
     mainWindow.on('blur', () => mainWindow.hide());
@@ -154,10 +163,11 @@ function createWindow() {
     if (mainWindow.isVisible()) {
       mainWindow.hide();
     } else {
+      updateWindowPosition(tray.getBounds(), mainWindow);
       mainWindow.show();
     }
   };
-  createBrowserWindow();
+
 
   tray.on('click', toggleApp);
 
