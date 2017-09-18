@@ -75,17 +75,31 @@ ipcMain.on('new-entry', (event, arg) => {
   });
 });
 
-ipcMain.on('get-entries', (event) => {
-  fs.readFile(logFile, 'utf-8', (err, data) => {
-    if (err) throw err;
-    const jsonArray = data.split('\n');
-    console.log({ jsonArray });
-    const parsedData = jsonArray
-      .filter(jsonString => !!jsonString)
-      .map(jsonString => JSON.parse(jsonString));
-    event.sender.send('get-entries-resp', parsedData);
-  });
-});
+const dataCache = {
+  lastFetched: 0,
+  data: null,
+};
+
+function loadData(callback = () => { }) {
+  if (dataCache.lastFetched < Date.now() - (1000 * 10)) {
+    fs.readFile(logFile, 'utf-8', (err, data) => {
+      if (err) throw err;
+      const jsonArray = data.split('\n');
+      console.log({ jsonArray });
+      const parsedData = jsonArray
+        .filter(jsonString => !!jsonString)
+        .map(jsonString => JSON.parse(jsonString));
+      dataCache.lastFetched = Date.now();
+      dataCache.data = parsedData;
+      callback(parsedData);
+    });
+  } else {
+    console.log('serving from cache');
+    callback(dataCache.data);
+  }
+}
+loadData();
+ipcMain.on('get-entries', event => loadData(data => event.sender.send('get-entries-resp', data)));
 
 ipcMain.on('hide-app', () => mainWindow.hide());
 
