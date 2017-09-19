@@ -63,6 +63,8 @@ try {
   console.log('error calling openSync');
 }
 
+const trayIconPath = path.join(__dirname, '../img/if_stop-watch-time-count_2203547.png');
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -155,7 +157,7 @@ const toggleApp = (tray, window) => {
 function createWindow() {
   // Create the browser window.
 
-  const tray = new Tray(path.join(__dirname, '../img/if_stop-watch-time-count_2203547.png'));
+  const tray = new Tray(trayIconPath);
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Quit', type: 'normal', click: () => app.quit() },
   ]);
