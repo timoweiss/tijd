@@ -154,11 +154,21 @@ const toggleApp = (tray, window) => {
   }
 };
 
+
+function toggleOpenAtLogin() {
+  app.setLoginItemSettings({
+    openAtLogin: !app.getLoginItemSettings().openAtLogin,
+  });
+}
+
+
 function createWindow() {
   // Create the browser window.
 
   const tray = new Tray(trayIconPath);
   const contextMenu = Menu.buildFromTemplate([
+    { label: 'Launch at login', type: 'checkbox', click: () => toggleOpenAtLogin(), checked: app.getLoginItemSettings().openAtLogin },
+    { type: 'separator' },
     { label: 'Quit', type: 'normal', click: () => app.quit() },
   ]);
 
