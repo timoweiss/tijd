@@ -169,7 +169,7 @@ function createWindow() {
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Launch at login', type: 'checkbox', click: () => toggleOpenAtLogin(), checked: app.getLoginItemSettings().openAtLogin },
     { type: 'separator' },
-    { label: 'Quit', type: 'normal', click: () => app.quit() },
+    { label: 'Quit', type: 'normal', click: () => app.quit(), accelerator: 'CommandOrControl+Q' },
   ]);
 
   tray.setToolTip('Track your time!');
