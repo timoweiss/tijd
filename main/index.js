@@ -103,6 +103,17 @@ ipcMain.on('get-entries', event => loadData(data => event.sender.send('get-entri
 
 ipcMain.on('hide-app', () => mainWindow.hide());
 
+const updateWindowPosition = (trayBounds, window) => {
+  const { screen } = electron;
+  const { workArea } = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
+  const windowSize = window.getSize();
+
+  const trayCenter = trayBounds.x + (trayBounds.width / 2);
+  const horizontalPosition = trayCenter - (windowSize[0] / 2);
+  const verticalPosition = workArea.y + 5;
+  window.setPosition(horizontalPosition, verticalPosition);
+};
+
 function createWindow() {
   // Create the browser window.
 
@@ -119,16 +130,6 @@ function createWindow() {
     console.log('right-click');
     tray.popUpContextMenu(contextMenu);
   });
-  const updateWindowPosition = (trayBounds, window) => {
-    const { screen } = electron;
-    const { workArea } = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
-    const windowSize = window.getSize();
-
-    const trayCenter = trayBounds.x + (trayBounds.width / 2);
-    const horizontalPosition = trayCenter - (windowSize[0] / 2);
-    const verticalPosition = workArea.y + 5;
-    window.setPosition(horizontalPosition, verticalPosition);
-  };
 
 
   const createBrowserWindow = () => {
