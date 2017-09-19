@@ -1,5 +1,6 @@
 {
   "name": "tijd",
+  "productName": "Tijd",
   "version": "1.0.0",
   "description": "Simple time tracking",
   "main": "main/index.js",
@@ -12,6 +13,11 @@
     "dist": "electron-builder"
   },
   "repository": "https://github.com/electron/electron-quick-start",
+  "author": {
+    "name": "Timo Weiß",
+    "email": "info@timo-weiss.com",
+    "url": "timo-weiss.com"
+  },
   "keywords": [
     "Electron",
     "quick",
