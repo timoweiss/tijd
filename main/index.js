@@ -114,13 +114,50 @@ const updateWindowPosition = (trayBounds, window) => {
   window.setPosition(horizontalPosition, verticalPosition);
 };
 
+const createBrowserWindow = (tray) => {
+  mainWindow = new BrowserWindow(Object.assign(config, {
+    title: 'Tijd',
+    show: false,
+    fullscreenable: false,
+
+    maximizable: false,
+    minimizable: false,
+    transparent: true,
+    frame: false,
+    webPreferences: {
+      backgroundThrottling: false,
+      devTools: !isProd,
+    },
+  }));
+
+  updateWindowPosition(tray.getBounds(), mainWindow);
+
+  mainWindow.loadURL(config.url);
+  mainWindow.on('blur', () => mainWindow.hide());
+
+  // don't know why, but this seems to fix the initial shadow problem
+  setTimeout(() => console.log('showing') || mainWindow.show(), 1000);
+};
+
+const toggleApp = (tray, window) => {
+  if (!window) {
+    createBrowserWindow(tray);
+    return;
+  }
+  if (window.isVisible()) {
+    window.hide();
+  } else {
+    updateWindowPosition(tray.getBounds(), window);
+    window.show();
+  }
+};
+
 function createWindow() {
   // Create the browser window.
 
   const tray = new Tray(path.join(__dirname, '../img/if_stop-watch-time-count_2203547.png'));
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Quit', type: 'normal', click: () => app.quit() },
-
   ]);
 
   tray.setToolTip('Track your time!');
@@ -131,49 +168,10 @@ function createWindow() {
     tray.popUpContextMenu(contextMenu);
   });
 
+  tray.on('click', () => toggleApp(tray, mainWindow));
 
-  const createBrowserWindow = () => {
-    mainWindow = new BrowserWindow(Object.assign(config, {
-      title: 'Tijd',
-      show: false,
-      fullscreenable: false,
-
-      maximizable: false,
-      minimizable: false,
-      transparent: true,
-      frame: false,
-      webPreferences: {
-        backgroundThrottling: false,
-        devTools: !isProd,
-      },
-    }));
-
-    updateWindowPosition(tray.getBounds(), mainWindow);
-
-    mainWindow.loadURL(config.url);
-    mainWindow.on('blur', () => mainWindow.hide());
-
-    // don't know why, but this seems to fix the initial shadow problem
-    setTimeout(() => mainWindow.show(), 1000);
-  };
-  const toggleApp = () => {
-    if (!mainWindow) {
-      createBrowserWindow();
-      return;
-    }
-    if (mainWindow.isVisible()) {
-      mainWindow.hide();
-    } else {
-      updateWindowPosition(tray.getBounds(), mainWindow);
-      mainWindow.show();
-    }
-  };
-
-
-  tray.on('click', toggleApp);
-
-
-  if (!shortcuts.onOpen(toggleApp)) {
+  toggleApp(tray, mainWindow);
+  if (!shortcuts.onOpen(() => toggleApp(tray, mainWindow))) {
     console.error('registering shortcut failed');
   }
 }
