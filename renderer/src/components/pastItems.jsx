@@ -50,7 +50,7 @@ export default class PastItems extends React.Component {
             key={item.k}
             onClick={() => this.setState({ selectedItemId: item.k })}
           >
-            <PastItem showEdit={this.state.selectedItemId === item.k} item={item} />
+            <PastItem showEdit={false && this.state.selectedItemId === item.k} item={item} />
           </span>
         )),
       );
