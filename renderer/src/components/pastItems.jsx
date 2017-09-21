@@ -15,6 +15,14 @@ function getFirstAndLast(items) {
     last: items[items.length - 1],
   };
 }
+function getTotalTime(items = []) {
+  return items.reduce((prev, current) => {
+    const newVal = prev + (new Date(current.finished) - new Date(current.created));
+    return newVal;
+  }, 0);
+}
+
+console.log(getTotalTime([{ finished: 100, created: 10 }, { finished: 100, created: 10 }]));
 
 export default class PastItems extends React.Component {
   constructor(props) {
@@ -37,11 +45,17 @@ export default class PastItems extends React.Component {
 
       const { first, last } = getFirstAndLast(itemsOnThatDay);
 
+      // get all break items
+      const breaks = itemsOnThatDay.filter(item => item.type === 'break');
+      const totalBreakTime = getTotalTime(breaks);
+
+      // this date parsing thing is due to inconsistent created and finished data
+      const to = last.type === 'bye' ? new Date(last.created) * 1 : new Date(last.finished) * 1;
 
       elems.push(
         <DelimiterItem
           key={`delimiter_${day}`}
-          totalTime={<DetailedTime from={first.created} to={last.finished} />}
+          totalTime={<DetailedTime from={first.created} to={to - totalBreakTime} />}
           dateString={creationDate.format('dddd, MMMM Do YYYY')}
         />,
         ...itemsOnThatDay.map(item => (
