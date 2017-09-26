@@ -34,4 +34,4 @@ npm run deploy
 ```
 Builds and deploys a [release artifact](https://github.com/timoweiss/tijd/releases).
 Electron-autoUpdater will fetch the newest release automatically when starting the app. 
-Ensure you set an env variable [GH_TOKEN](https://github.com/settings/tokens) with a personal access token of a user with write access for this repo.
+Ensure you set an env variable [GH_TOKEN](https://github.com/settings/tokens) with a personal access token.
