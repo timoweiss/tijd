@@ -1,5 +1,4 @@
 const req = require('request');
-const semver = require('semver');
 const { version: currentVersion } = require('../package.json');
 
 const getLatestDownloadPath = function() {

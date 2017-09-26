@@ -36,7 +36,9 @@
       }
     }
   },
-  "dependencies": {},
+  "dependencies": {
+    "request": "^2.82.0"
+  },
   "devDependencies": {
     "electron": "^1.7.6",
     "electron-builder": "^19.20.1",
