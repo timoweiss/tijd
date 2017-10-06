@@ -22,7 +22,7 @@ cd ./renderer && npm i
 # ./renderer
 npm start
 ```
-### Start the election app
+### Start the electron app
 ```
 # ./
 npm run dev
