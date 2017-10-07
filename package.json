@@ -10,8 +10,7 @@
     "dev": "NODE_ENV=dev electron .",
     "debug": "NODE_ENV=dev electron --inspect-brk .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "publish": "electron-builder -p always"
+    "dist": "electron-builder -p always"
   },
   "repository": "https://github.com/timoweiss/tijd",
   "author": {
