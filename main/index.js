@@ -63,7 +63,7 @@ try {
   console.log('error calling openSync');
 }
 
-const trayIconPath = path.join(__dirname, '../img/if_stop-watch-time-count_2203547.png');
+const trayIconPath = path.join(__dirname, '../img/if_stop-watch-time-count_2203547Template.png');
 
 
 // Keep a global reference of the window object, if you don't, the window will
