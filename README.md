@@ -30,7 +30,7 @@ npm run dev
 
 ### Deploy to Github release artifacts
 ´´´
-npm run deploy
+npm run dist
 ```
 Builds and deploys a [release artifact](https://github.com/timoweiss/tijd/releases).
 Electron-autoUpdater will fetch the newest release automatically when starting the app. 
