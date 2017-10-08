@@ -1,24 +1,32 @@
 const req = require('request');
+const semver = require('semver');
 const { version: currentVersion } = require('../package.json');
 
-const getLatestDownloadPath = function() {
-    const options = {
-        url: 'https://api.github.com/repositories/101575843/releases',
-        headers: { 'User-Agent': 'michaelknoch' }
-    };
+function getLatestDownloadPath() {
+  const options = {
+    url: 'https://api.github.com/repositories/101575843/releases',
+    headers: { 'User-Agent': 'michaelknoch' },
+  };
 
-    req(options, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            const { assets } = JSON.parse(body)[0];
-            const latestRelease = assets.filter(
-                asset => asset.content_type == 'application/zip'
-            )[0];
+  return new Promise(((resolve, reject) => {
+    req(options, (error, response, body) => {
+      if (!error && response.statusCode === 200) {
+        const { assets, tag_name } = JSON.parse(body)[0];
+        const latestZip = assets.find(asset => asset.content_type === 'application/zip');
 
-            return latestRelease.browser_download_url;
+        /* eslint-disable no-console */
+        console.log('currently on', currentVersion);
+        console.log('found version', semver.clean(tag_name));
+        /* eslint-enable no-console */
+
+        if (semver.lt(currentVersion, semver.clean(tag_name))) {
+          resolve(latestZip.browser_download_url);
         }
+        reject(`you are up to date with ${currentVersion}`);
+      }
+      reject('error during update', error);
     });
+  }));
 }
 
-module.exports = {
-    getLatestDownloadPath
-};
+module.exports = { getLatestDownloadPath };

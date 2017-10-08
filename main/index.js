@@ -7,10 +7,11 @@ const electron = require('electron');
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
+const getLatestDownloadPath = require('./update');
 
 const shortcuts = require('./shortcuts');
 
-const { app, BrowserWindow, Tray, Menu, globalShortcut, ipcMain } = electron;
+const { app, BrowserWindow, Tray, Menu, globalShortcut, ipcMain, autoUpdater } = electron;
 
 let NODE_ENV = process.env.NODE_ENV;
 
@@ -161,6 +162,19 @@ function toggleOpenAtLogin() {
   });
 }
 
+function checkForUpdates() {
+  getLatestDownloadPath()
+    .then((feedUrl) => {
+      autoUpdater.setFeedURL(feedUrl);
+      autoUpdater.checkForUpdates();
+    })
+    .catch(e => console.log(e));
+
+  autoUpdater.on('update-downloaded', () => {
+    autoUpdater.quitAndInstall();
+  });
+}
+
 
 function createWindow() {
   // Create the browser window.
@@ -186,6 +200,8 @@ function createWindow() {
   if (!shortcuts.onOpen(() => toggleApp(tray, mainWindow))) {
     console.error('registering shortcut failed');
   }
+
+  checkForUpdates();
 }
 
 // This method will be called when Electron has finished
