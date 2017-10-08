@@ -7,10 +7,10 @@ const electron = require('electron');
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
-const { getLatestDownloadPath } = require('./update');
+const { checkForUpdates } = require('./update');
 const shortcuts = require('./shortcuts');
 
-const { app, BrowserWindow, Tray, Menu, globalShortcut, ipcMain, autoUpdater } = electron;
+const { app, BrowserWindow, Tray, Menu, globalShortcut, ipcMain } = electron;
 
 let NODE_ENV = process.env.NODE_ENV;
 
@@ -160,20 +160,6 @@ function toggleOpenAtLogin() {
     openAtLogin: !app.getLoginItemSettings().openAtLogin,
   });
 }
-
-function checkForUpdates() {
-  getLatestDownloadPath()
-    .then((feedUrl) => {
-      autoUpdater.setFeedURL(feedUrl);
-      autoUpdater.checkForUpdates();
-    })
-    .catch(e => console.log(e));
-
-  autoUpdater.on('update-downloaded', () => {
-    autoUpdater.quitAndInstall();
-  });
-}
-
 
 function createWindow() {
   // Create the browser window.

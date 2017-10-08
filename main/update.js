@@ -1,3 +1,4 @@
+const { autoUpdater } = require('electron'); // eslint-disable-line
 const req = require('request');
 const semver = require('semver');
 const { version: currentVersion } = require('../package.json');
@@ -29,4 +30,17 @@ function getLatestDownloadPath() {
   }));
 }
 
-module.exports = { getLatestDownloadPath };
+function checkForUpdates() {
+  getLatestDownloadPath()
+    .then((feedUrl) => {
+      autoUpdater.setFeedURL(feedUrl);
+      autoUpdater.checkForUpdates();
+    })
+    .catch(e => console.log(e));
+
+  autoUpdater.on('update-downloaded', () => {
+    autoUpdater.quitAndInstall();
+  });
+}
+
+module.exports = { checkForUpdates };
