@@ -7,8 +7,7 @@ const electron = require('electron');
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
-const getLatestDownloadPath = require('./update');
-
+const { getLatestDownloadPath } = require('./update');
 const shortcuts = require('./shortcuts');
 
 const { app, BrowserWindow, Tray, Menu, globalShortcut, ipcMain, autoUpdater } = electron;
