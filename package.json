@@ -10,7 +10,7 @@
     "dev": "NODE_ENV=dev electron .",
     "debug": "NODE_ENV=dev electron --inspect-brk .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder -p always"
+    "dist": "cd renderer/ && npm run build && cd .. && electron-builder -p always"
   },
   "repository": "https://github.com/timoweiss/tijd",
   "author": {
