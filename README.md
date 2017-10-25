@@ -27,3 +27,11 @@ npm start
 # ./
 npm run dev
 ```
+
+### Deploy to Github release artifacts
+´´´
+npm run dist
+```
+Builds and deploys a [release artifact](https://github.com/timoweiss/tijd/releases).
+Electron-autoUpdater will fetch the newest release automatically when starting the app. 
+Ensure you set an env variable [GH_TOKEN](https://github.com/settings/tokens) with a personal access token.

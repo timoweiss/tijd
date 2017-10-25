@@ -7,7 +7,7 @@ const electron = require('electron');
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
-
+const { checkForUpdates } = require('./update');
 const shortcuts = require('./shortcuts');
 
 const { app, BrowserWindow, Tray, Menu, globalShortcut, ipcMain } = electron;
@@ -161,7 +161,6 @@ function toggleOpenAtLogin() {
   });
 }
 
-
 function createWindow() {
   // Create the browser window.
 
@@ -186,6 +185,8 @@ function createWindow() {
   if (!shortcuts.onOpen(() => toggleApp(tray, mainWindow))) {
     console.error('registering shortcut failed');
   }
+
+  checkForUpdates();
 }
 
 // This method will be called when Electron has finished
