@@ -33,14 +33,35 @@ export const Time = ({ item }) => (
 
 
 // renders time on second precision
-export const DetailedTime = ({ from, to }) => {
-  const dt = to ? getDetailedTimeFromTo(from, to) : getDetailedTimeToNow(from);
-  return (
-    <div>
-      <PluralSingular num={dt.days} singular="day" />
-      <PluralSingular num={dt.hours} singular="hour" />
-      <PluralSingular num={dt.minutes} singular="minute" />
-      <PluralSingular num={dt.seconds} singular="second" />
-    </div>
-  );
-};
+export class DetailedTime extends React.Component {
+  shouldComponentUpdate(nextProps) {
+    if (!nextProps.to) {
+      return true;
+    }
+    if (!this.props.to && nextProps.to) {
+      return true;
+    }
+
+    if (nextProps.to && nextProps.from === this.props.from && nextProps.to === this.props.to) {
+      return false;
+    }
+
+    console.log(nextProps.from, this.props.from, nextProps.to, this.props.to);
+    console.log(nextProps.from === this.props.from, nextProps.to === this.props.to);
+    return true;
+  }
+
+  render() {
+    const { from, to } = this.props;
+
+    const dt = to ? getDetailedTimeFromTo(from, to) : getDetailedTimeToNow(from);
+    return (
+      <div>
+        <PluralSingular num={dt.days} singular="day" />
+        <PluralSingular num={dt.hours} singular="hour" />
+        <PluralSingular num={dt.minutes} singular="minute" />
+        <PluralSingular num={dt.seconds} singular="second" />
+      </div>
+    );
+  }
+}
