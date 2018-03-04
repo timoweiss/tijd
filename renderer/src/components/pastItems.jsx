@@ -60,7 +60,7 @@ export default class PastItems extends React.Component {
       const totalBreakTime = getTotalTime(breaks);
 
       // this date parsing thing is due to inconsistent created and finished data
-      const to = last.type === 'bye' ? new Date(last.created) * 1 : new Date(last.finished) * 1;
+      const to = last.type === 'bye' ? new Date(last.created) : new Date(last.finished);
 
       elems.push(
         <DelimiterItem
