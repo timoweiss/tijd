@@ -83,22 +83,17 @@ const dataCache = {
 };
 
 function loadData(callback = () => { }) {
-  if (dataCache.lastFetched < Date.now() - (1000 * 10)) {
-    fs.readFile(logFile, 'utf-8', (err, data) => {
-      if (err) throw err;
-      const jsonArray = data.split('\n');
-      console.log({ jsonArray });
-      const parsedData = jsonArray
-        .filter(jsonString => !!jsonString)
-        .map(jsonString => JSON.parse(jsonString));
-      dataCache.lastFetched = Date.now();
-      dataCache.data = parsedData;
-      callback(parsedData);
-    });
-  } else {
-    console.log('serving from cache');
-    callback(dataCache.data);
-  }
+  fs.readFile(logFile, 'utf-8', (err, data) => {
+    if (err) throw err;
+    const jsonArray = data.split('\n');
+
+    const parsedData = jsonArray
+      .filter(jsonString => !!jsonString)
+      .map(jsonString => JSON.parse(jsonString));
+    dataCache.lastFetched = Date.now();
+    dataCache.data = parsedData;
+    callback(parsedData);
+  });
 }
 loadData();
 
