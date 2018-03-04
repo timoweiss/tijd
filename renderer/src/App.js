@@ -188,7 +188,7 @@ class App extends React.Component {
     this.setState((prevState) => {
       const now = new Date().toISOString();
       // ongoing item
-      const last = prevState.pastItems.pop();
+      const last = JSON.parse(JSON.stringify(prevState.pastItems.pop()));
 
       if (last) {
         // finish it
