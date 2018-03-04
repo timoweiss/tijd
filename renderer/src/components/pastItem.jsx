@@ -16,7 +16,6 @@ export default class PastItem extends React.Component {
   }
   render() {
     const { item, showEdit } = this.props;
-    console.log('calling render', item);
     return (
       <div className="past-item">
         <span>{typeEmojiMap[item.type] ? typeEmojiMap[item.type] : item.name}</span>
