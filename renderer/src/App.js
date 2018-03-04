@@ -90,12 +90,12 @@ class App extends React.Component {
     this.addTime = this.addTime.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
     this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
+    this.stopIntervalUpdate = this.stopIntervalUpdate.bind(this);
+    this.startIntervalUpdate = this.startIntervalUpdate.bind(this);
   }
 
   componentWillMount() {
-    this.setState(prevState => ({
-      interval: setInterval(() => this.setState({ h: prevState.h + 1 }), 1000),
-    }));
+    this.startIntervalUpdate();
   }
 
   componentDidMount() {
@@ -130,9 +130,7 @@ class App extends React.Component {
   }
 
   componentWillUnmount() {
-    this.setState(prevState => ({
-      interval: clearInterval(prevState.interval),
-    }));
+    this.stopIntervalUpdate();
   }
 
   onInputChange(event, { newValue, method }) {
@@ -150,6 +148,18 @@ class App extends React.Component {
     this.setState({
       hints: [],
     });
+  }
+
+  stopIntervalUpdate() {
+    this.setState(prevState => ({
+      interval: clearInterval(prevState.interval),
+    }));
+  }
+
+  startIntervalUpdate() {
+    this.setState(prevState => ({
+      interval: setInterval(() => this.setState({ h: prevState.h + 1 }), 1000),
+    }));
   }
 
   addTime(event) {
