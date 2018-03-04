@@ -16,10 +16,10 @@ let NODE_ENV = process.env.NODE_ENV;
 
 // default is prod
 if (!NODE_ENV) {
-  NODE_ENV = 'prod';
+  NODE_ENV = 'production';
 }
 
-const isProd = NODE_ENV === 'prod';
+const isProd = NODE_ENV === 'production';
 
 const envConfig = {
   dev: {
@@ -38,7 +38,7 @@ const envConfig = {
     url: 'http://localhost:3000',
     dataPath: path.join(__dirname, '..', 'logs.jsonl'),
   },
-  prod: {
+  production: {
     width: 330,
     height: 400,
     resizable: false,
