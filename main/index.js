@@ -101,9 +101,21 @@ function loadData(callback = () => { }) {
   }
 }
 loadData();
-ipcMain.on('get-entries', event => loadData(data => event.sender.send('get-entries-resp', data)));
 
-ipcMain.on('hide-app', () => mainWindow.hide());
+function hideApp(window, source) {
+  console.log(source, ' | going to hide, state was', window.isVisible());
+  window.hide();
+  window.webContents.send('app-isgoingto-hide');
+}
+function showApp(window, source) {
+  console.log(source, ' | going to show, state was', window.isVisible());
+  window.show();
+  window.webContents.send('app-isgoingto-show');
+}
+
+ipcMain.on('get-entries', event => loadData(data => event.sender.send('get-entries-resp', data)));
+ipcMain.on('hide-app', () => hideApp(mainWindow, 'ipcMain on hide-app'));
+
 
 const updateWindowPosition = (trayBounds, window) => {
   const { screen } = electron;
@@ -135,10 +147,10 @@ const createBrowserWindow = (tray) => {
   updateWindowPosition(tray.getBounds(), mainWindow);
 
   mainWindow.loadURL(config.url);
-  mainWindow.on('blur', () => mainWindow.hide());
+  mainWindow.on('blur', () => hideApp(mainWindow, 'on blur'));
 
   // don't know why, but this seems to fix the initial shadow problem
-  setTimeout(() => console.log('showing') || mainWindow.show(), 1000);
+  setTimeout(() => showApp(mainWindow, 'initial'), 1000);
 };
 
 const toggleApp = (tray, window) => {
@@ -147,10 +159,10 @@ const toggleApp = (tray, window) => {
     return;
   }
   if (window.isVisible()) {
-    window.hide();
+    hideApp(window, 'toggleApp');
   } else {
     updateWindowPosition(tray.getBounds(), window);
-    window.show();
+    showApp(window, 'toggleApp');
   }
 };
 
