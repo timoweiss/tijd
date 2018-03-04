@@ -12,6 +12,9 @@ const typeEmojiMap = {
 
 export default class PastItem extends React.Component {
   shouldComponentUpdate(nextProps) {
+    if (nextProps.item.checked !== this.props.item.checked) {
+      return true;
+    }
     if (!nextProps.item.finished) {
       return true;
     }
@@ -22,11 +25,23 @@ export default class PastItem extends React.Component {
     return false;
   }
   render() {
-    const { item, showEdit } = this.props;
+    const { item, showEdit, onCheck } = this.props;
     return (
-      <div className="past-item">
+      <div
+        role="presentation"
+        onClick={() => onCheck(item)}
+        className="past-item"
+      >
         <span>{typeEmojiMap[item.type] ? typeEmojiMap[item.type] : item.name}</span>
-        <Time item={item} />
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        >
+          <Time item={item} />
+          <input type="checkbox" checked={this.props.item.checked} />
+        </div>
         {showEdit && <EditItem value={{ min: 2, max: 10 }} />}
       </div>
     );

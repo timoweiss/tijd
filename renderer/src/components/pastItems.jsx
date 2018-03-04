@@ -2,6 +2,7 @@
 // eslint-disable-next-line
 import React from 'react';
 import * as moment from 'moment';
+import { ipcRenderer } from 'electron';
 import { groupBySameday } from '../helper/zeit';
 import { DetailedTime } from './time';
 
@@ -33,6 +34,11 @@ function momorizedDayOfYear(day) {
 }
 
 console.log(getTotalTime([{ finished: 100, created: 10 }, { finished: 100, created: 10 }]));
+
+
+function toggleChecked(item) {
+  ipcRenderer.send('update-entry', { ...item, checked: !item.checked });
+}
 
 export default class PastItems extends React.Component {
   constructor(props) {
@@ -73,18 +79,23 @@ export default class PastItems extends React.Component {
             role="presentation"
             key={item.k}
           >
-            <PastItem showEdit={false && this.state.selectedItemId === item.k} item={item} />
+            <PastItem
+              onCheck={clickedItem => toggleChecked(clickedItem)}
+              showEdit={false && this.state.selectedItemId === item.k}
+              item={item}
+            />
           </span>
         )),
       );
     });
 
     return (
-      <div style={{
-        height: 'calc(100vh - 54px)',
-        marginTop: '10px',
-        background: 'white',
-      }}
+      <div
+        style={{
+          height: 'calc(100vh - 54px)',
+          marginTop: '10px',
+          background: 'white',
+        }}
       >
         <div style={{
           overflow: 'scroll',

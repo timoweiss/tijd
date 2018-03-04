@@ -97,6 +97,12 @@ function loadData(callback = () => { }) {
 }
 loadData();
 
+function updateAllData(updatedData, done) {
+  const stringData = updatedData.map(JSON.stringify).join('\n');
+
+  fs.writeFile(logFile, `${stringData}\n`, err => done(err));
+}
+
 function hideApp(window, source) {
   console.log(source, ' | going to hide, state was', window.isVisible());
   window.hide();
@@ -110,6 +116,19 @@ function showApp(window, source) {
 
 ipcMain.on('get-entries', event => loadData(data => event.sender.send('get-entries-resp', data)));
 ipcMain.on('hide-app', () => hideApp(mainWindow, 'ipcMain on hide-app'));
+ipcMain.on('update-entry', (event, entry) => {
+  loadData((data) => {
+    const updatedData = data.map((e) => {
+      if (e.k === entry.k) {
+        return entry;
+      }
+      return e;
+    });
+    updateAllData(updatedData, () => {
+      mainWindow.webContents.send('get-entries-resp', updatedData);
+    });
+  });
+});
 
 
 const updateWindowPosition = (trayBounds, window) => {
