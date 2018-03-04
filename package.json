@@ -1,7 +1,7 @@
 {
   "name": "tijd",
   "productName": "Tijd",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple time tracking",
   "main": "main/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "dev-productionlike": "NODE_ENV=prodlike electron .",
     "dev": "NODE_ENV=dev electron .",
     "debug": "NODE_ENV=dev electron --inspect-brk .",
-    "pack": "electron-builder --dir",
+    "pack": "NODE_ENV=production electron-builder --dir",
     "dist": "cd renderer/ && npm run build && cd .. && electron-builder -p always"
   },
   "repository": "https://github.com/timoweiss/tijd",
@@ -38,16 +38,16 @@
   "dependencies": {
     "electron-gh-releases": "^2.0.4",
     "request": "^2.82.0",
-    "semver": "^5.4.1"
+    "semver": "^5.5.0"
   },
   "devDependencies": {
     "electron": "^1.8.2",
-    "electron-builder": "^19.20.1",
-    "eslint": "^4.6.0",
+    "electron-builder": "^19.56.2",
+    "eslint": "^4.18.2",
     "eslint-config-airbnb": "^15.1.0",
-    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.3.0"
+    "eslint-plugin-react": "^7.7.0"
   },
   "eslintConfig": {
     "extends": "airbnb"

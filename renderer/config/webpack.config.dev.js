@@ -27,12 +27,6 @@ const env = getClientEnvironment(publicUrl);
 // The production configuration is different and lives in a separate file.
 module.exports = {
 
-  "resolve": {
-    "alias": {
-      "react": "preact-compat",
-      "react-dom": "preact-compat"
-    }
-  },
   target: 'electron-renderer',
   // You may want 'eval' instead if you prefer to see the compiled output in DevTools.
   // See the discussion in https://github.com/facebookincubator/create-react-app/issues/343.
