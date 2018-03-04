@@ -90,7 +90,6 @@ class App extends React.Component {
     this.addTime = this.addTime.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
     this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
-    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
   }
 
   componentWillMount() {
@@ -145,11 +144,6 @@ class App extends React.Component {
       timeInput: newValue,
     }));
     // setTimeout(() => this.messagesEnd.scrollIntoView({behavior: 'smooth' }), 1000)
-  }
-
-
-  onSuggestionsFetchRequested({ value, reason }) {
-    console.log(this, { value, reason });
   }
 
   onSuggestionsClearRequested() {
@@ -239,7 +233,7 @@ class App extends React.Component {
 
           <Autosuggest
             suggestions={this.state.hints}
-            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsFetchRequested={() => { }}
             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
             getSuggestionValue={val => val.hint}
             renderSuggestion={renderSuggestion}
