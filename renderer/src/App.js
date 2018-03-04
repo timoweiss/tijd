@@ -127,6 +127,20 @@ class App extends React.Component {
       });
     });
     ipcRenderer.send('get-entries');
+
+
+    ipcRenderer.on('app-isgoingto-hide', () => {
+      console.log('received app-isgoingto-hide');
+      if (this.state.interval) {
+        this.stopIntervalUpdate();
+      }
+    });
+    ipcRenderer.on('app-isgoingto-show', () => {
+      console.log('received app-isgoingto-show');
+      if (!this.state.interval) {
+        this.startIntervalUpdate();
+      }
+    });
   }
 
   componentWillUnmount() {
