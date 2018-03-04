@@ -48,7 +48,17 @@ export const groupBySameday = items => items.reduce(
   },
   {});
 
+const durationCache = {};
+
 export const ta = {
-  duration: (date, end) => moment(date).from(end || new Date(), true),
+  duration: (date, end) => {
+    const compound = date + end;
+    if (end && durationCache[compound]) {
+      return durationCache[compound];
+    }
+
+    durationCache[compound] = moment(date).from(end || new Date(), true);
+    return durationCache[compound];
+  },
   ago: date => moment(date).fromNow(),
 };
