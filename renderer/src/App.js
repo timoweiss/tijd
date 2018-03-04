@@ -62,17 +62,17 @@ const slashHints = [{
   hint: '/hi',
   description: 'start working',
   id: 'hi',
-  create: name => ({ k: `${Date.now()}hi`, name, created: Date.now(), type: 'hi' }),
+  create: name => ({ k: `${Date.now()}hi`, name, created: new Date().toISOString(), type: 'hi' }),
 }, {
   hint: '/bye',
   description: 'end working',
   id: 'bye',
-  create: name => ({ k: `${Date.now()}bye`, name, created: Date.now(), type: 'bye' }),
+  create: name => ({ k: `${Date.now()}bye`, name, created: new Date().toISOString(), type: 'bye' }),
 }, {
   hint: '/break',
   description: 'take a break from working',
   id: 'break',
-  create: name => ({ k: `${Date.now()}bye`, name, created: Date.now(), type: 'break' }),
+  create: name => ({ k: `${Date.now()}bye`, name, created: new Date().toISOString(), type: 'break' }),
 }];
 
 
