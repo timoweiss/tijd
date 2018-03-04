@@ -21,6 +21,16 @@ function getTotalTime(items = []) {
     return newVal;
   }, 0);
 }
+const dayOfYearCache = {};
+function momorizedDayOfYear(day) {
+  if (dayOfYearCache[day]) {
+    return dayOfYearCache[day];
+  }
+  const formattedDayOfYear = moment().dayOfYear(day).format('dddd, MMMM Do YYYY');
+  dayOfYearCache[day] = formattedDayOfYear;
+
+  return formattedDayOfYear;
+}
 
 console.log(getTotalTime([{ finished: 100, created: 10 }, { finished: 100, created: 10 }]));
 
@@ -40,7 +50,7 @@ export default class PastItems extends React.Component {
 
     // render PastItems grouped by day, delimited by DelimiterItems
     days.forEach((day) => {
-      const creationDate = moment().dayOfYear(day);
+      const formattedCreationDate = momorizedDayOfYear(day);
       const itemsOnThatDay = itemsGroupedByDay[day];
 
       const { first, last } = getFirstAndLast(itemsOnThatDay);
@@ -56,7 +66,7 @@ export default class PastItems extends React.Component {
         <DelimiterItem
           key={`delimiter_${day}`}
           totalTime={<DetailedTime from={first.created} to={to - totalBreakTime} />}
-          dateString={creationDate.format('dddd, MMMM Do YYYY')}
+          dateString={formattedCreationDate}
         />,
         ...itemsOnThatDay.map(item => (
           <span
