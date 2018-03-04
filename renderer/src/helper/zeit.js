@@ -30,9 +30,17 @@ export function getDetailedTimeToNow(from) {
   return getDetailedTimeFromTo(from, Date.now());
 }
 
+function getDayOfYear(date) {
+  const now = new Date(date);
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+  const day = Math.floor(diff / oneDay);
+  return day;
+}
+
 export const groupBySameday = items => items.reduce(
   (groups, item) => {
-    const dayOfYear = moment(item.created).dayOfYear();
+    const dayOfYear = getDayOfYear(item.created);
     // eslint-disable-next-line
     groups[dayOfYear] = groups[dayOfYear] || [];
     groups[dayOfYear].push(item);
