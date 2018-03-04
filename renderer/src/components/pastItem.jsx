@@ -11,8 +11,15 @@ const typeEmojiMap = {
 };
 
 export default class PastItem extends React.Component {
-  shouldComponentUpdate() {
-    return !this.props.item.finished;
+  shouldComponentUpdate(nextProps) {
+    if (!nextProps.item.finished) {
+      return true;
+    }
+    if (this.props.item.finished !== nextProps.item.finished) {
+      console.log('update', this.props.item.finished, nextProps.item.finished);
+      return true;
+    }
+    return false;
   }
   render() {
     const { item, showEdit } = this.props;
