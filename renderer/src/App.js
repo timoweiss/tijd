@@ -1,5 +1,3 @@
-
-// eslint-disable-next-line
 import React, { Component } from 'react';
 
 import Autosuggest from 'react-autosuggest';
@@ -76,7 +74,7 @@ const slashHints = [{
 }];
 
 
-class App extends React.Component {
+class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -217,7 +215,7 @@ class App extends React.Component {
 
       return {
         ...prevState,
-        // put back the now completed ongoing and the new ongoing 
+        // put back the now completed ongoing and the new ongoing
         pastItems: [...prevState.pastItems, last, newItem],
         // reset hint list
         // hints: [],
