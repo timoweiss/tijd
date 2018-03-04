@@ -148,7 +148,6 @@ class App extends React.Component {
   }
 
   onInputChange(event, { newValue, method }) {
-    console.log({ newValue, method });
     const changeHintList = method !== 'down' && method !== 'up';
     this.setState(prevState => ({
       ...prevState,
