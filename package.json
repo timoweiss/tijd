@@ -41,7 +41,7 @@
     "semver": "^5.5.0"
   },
   "devDependencies": {
-    "electron": "^1.8.2",
+    "electron": "^1.8.4",
     "electron-builder": "^19.56.2",
     "eslint": "^4.18.2",
     "eslint-config-airbnb": "^15.1.0",
